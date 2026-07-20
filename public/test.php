@@ -7,8 +7,6 @@
 <body>
     <?php
         echo "<h1>Halo Dunia kerja nyata!</h1>";
-
-         echo "<h1>Halo Dunia kerja nyata bangettt! suer ga ohong</h1>";
     ?>
 </body>
 </html>
