@@ -3,11 +3,12 @@
 <head>
     <title>Register - Manajemen File</title>
     <style>
-        body { font-family: sans-serif; background-color: #f3f4f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { width: 100%; max-width: 400px; padding: 20px; box-sizing: border-box; }
         .input-group { margin-bottom: 15px; }
-        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #0f172a; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 15px; cursor: pointer; }
         .error { color: red; font-size: 13px; margin-bottom: 10px; }
     </style>
 </head>
