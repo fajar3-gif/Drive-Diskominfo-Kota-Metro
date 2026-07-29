@@ -2,106 +2,325 @@
 <html lang="id">
 
 <head>
-    <title>Sampah - Drive Saya</title>
+    <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Drive</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
             margin: 0;
             display: flex;
+            flex-direction: column;
             height: 100vh;
             background-color: #ffffff;
-            color: #1f1f1f;
+            color: #334155;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4a7c8a 0%, #5a8f9e 20%, #7baab5 40%, #a8c8cf 60%, #6a9aaa 80%, #4a7080 100%);
+            padding: 10px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: none;
+            z-index: 20;
+            color: white;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
         }
 
         .sidebar {
-            width: 250px;
-            background: #f1f3f4;
+            width: 220px;
+            background: #f3f6f8;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            border-right: 2px solid #ccc;
+            box-shadow: none;
+            z-index: 10;
+            border-right: 1px solid #e2e8f0;
         }
 
         .logo-title {
             margin-top: 0;
-            font-size: 22px;
+            font-size: 20px;
             margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: white;
         }
 
-        .logout-btn {
-            margin-top: auto;
-            padding: 12px;
-            background: white;
-            color: #d93025;
-            border: 2px solid #d93025;
+        .sidebar-card {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 20px;
+            border-radius: 0;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .sidebar-card:hover {
+            background: rgba(255, 255, 255, 0.45);
+        }
+
+        .sidebar-card h3 {
+            color: #1e293b;
+            margin-top: 0;
+            font-size: 15px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .sidebar-input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0;
+            background: rgba(255, 255, 255, 0.95);
+            font-family: inherit;
+            font-size: 14px;
+            color: #1e293b;
+            outline: none;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-input:focus {
+            background: #fff;
+            border-color: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+
+        .sidebar-btn {
+            width: 100%;
+            padding: 9px 12px;
+            background-color: #4a7c8a;
+            color: #ffffff;
+            border: none;
             border-radius: 0;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .logout-btn:hover {
-            background: #d93025;
-            color: white;
+        .sidebar-btn:hover,
+        .sidebar-btn.active {
+            background-color: rgba(0, 0, 0, 0.10);
+            color: #0f172a;
+        }
+
+        .sidebar-btn:hover img,
+        .sidebar-btn.active img {
+            filter: brightness(0) invert(0) opacity(0.8) !important;
+        }
+
+        .sidebar-btn-outline {
+            width: 100%;
+            padding: 9px 12px;
+            background-color: #ffffff;
+            color: #4a7c8a;
+            border: 2px solid #4a7c8a;
+            border-radius: 0;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .sidebar-btn-outline:hover {
+            background-color: rgba(0, 0, 0, 0.10);
+            color: #0f172a;
+        }
+
+        .sidebar-btn-outline:hover img {
+            filter: brightness(0) invert(0) opacity(0.8) !important;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            margin-top: 10px;
+        }
+
+        .sidebar-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 14px;
+            border-radius: 0;
+            color: #475569;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-menu-item:hover,
+        .sidebar-menu-item.active {
+            background-color: rgba(0, 0, 0, 0.10);
+            color: #0f172a;
+        }
+        
+        .sidebar-menu-item.active {
+            font-weight: 600;
+        }
+
+        .sidebar-menu-item img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            opacity: 0.6;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-menu-item:hover img,
+        .sidebar-menu-item.active img {
+            opacity: 0.9;
+        }
+
+        .sidebar-link {
+            display: block;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.35);
+            color: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 0;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.45);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
         }
 
         .main-content {
             flex: 1;
-            padding: 30px;
+            padding: 20px 40px 40px 40px;
             overflow-y: auto;
-            background-color: #ffffff;
-            border-radius: 0;
-            box-shadow: none;
         }
 
-        .section-title {
-            font-size: 14px;
+        .search-input {
+            width: 500px;
+            max-width: 100%;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 15px;
+            background: white;
+            transition: all 0.3s ease;
+            outline: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .search-input:focus {
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+        }
+
+        .search-btn {
+            padding: 10px 28px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            cursor: pointer;
             font-weight: 600;
-            color: #000;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
+            font-size: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: rgba(0, 0, 0, 0.10);
+        }
+
+        .reset-btn {
+            padding: 10px 24px;
+            background-color: rgba(239, 68, 68, 0.9);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background-color: rgba(220, 38, 38, 1);
+        }
+
+        /* --- PENGATURAN GRID UNTUK KOLOM DATA --- */
+        .list-header {
+            display: grid;
+            /* Mengatur perbandingan lebar kolom: Nama (luas), Tanggal (sedang), Tipe (sedang), Ukuran (kecil), Menu (sangat kecil) */
+            grid-template-columns: minmax(200px, 2.5fr) minmax(150px, 1.2fr) minmax(150px, 1.2fr) minmax(100px, 0.8fr) 40px;
+            align-items: center;
+            padding: 10px 14px;
+            font-weight: 600;
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #e2e8f0;
+            gap: 15px;
+        }
+
+        .item-card {
+            background: white;
+            padding: 10px 14px;
+            border-radius: 0;
+            display: grid;
+            /* Harus sama persis dengan grid-template-columns milik list-header */
+            grid-template-columns: minmax(200px, 2.5fr) minmax(150px, 1.2fr) minmax(150px, 1.2fr) minmax(100px, 0.8fr) 40px;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #e2e8f0; border-top: none; border-left: none; border-right: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .item-card:hover {
+            background-color: #e8f0fe;
         }
 
         .grid {
             display: flex;
             flex-direction: column;
-        }
-
-        .folder-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .folder-card {
-            background: white;
-            border: 1px solid #666;
-            padding: 10px;
-            border-radius: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .item-card {
-            background: white;
-            border-bottom: 1px solid #ccc;
-            padding: 12px 10px;
-            border-radius: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .item-card:hover {
-            background-color: #f9f9f9;
+            gap: 0;
         }
 
         .file-name {
             min-width: 0;
-            flex: 1;
             overflow: hidden;
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            cursor: pointer; 
+            user-select: none;
+            font-weight: 500;
+            color: #334155;
         }
 
         .file-name span:last-child {
@@ -111,14 +330,59 @@
             white-space: nowrap;
         }
 
-        .empty-text {
-            color: #666;
+        /* Styling untuk data di tiap kolom tambahan */
+        .item-details {
+            color: #64748b;
             font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ===== MULTI-SELECT ===== */
+        .item-card.selected {
+            background-color: #e8f0fe !important;
+        }
+        .select-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #bcc0c4;
+            border-radius: 3px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            color: white;
+            background: white;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.15s, background 0.15s;
+        }
+        .item-card:hover .select-checkbox,
+        .item-card.selected .select-checkbox {
+            opacity: 1;
+        }
+        .item-card.selected .select-checkbox {
+            background: #1a73e8;
+            border-color: #1a73e8;
+        }
+        #selection-bar button {
+            transition: background 0.15s;
+        }
+
+        .empty-text {
+            color: #64748b;
+            font-size: 14px;
+            font-style: italic;
+            padding: 10px 0;
         }
 
         .dropdown {
             position: relative;
             display: inline-block;
+            text-align: right;
         }
 
         .dropbtn {
@@ -127,8 +391,13 @@
             font-size: 20px;
             font-weight: bold;
             cursor: pointer;
-            padding: 0 10px;
-            color: #1f1f1f;
+            padding: 0 8px;
+            color: #64748b;
+            transition: color 0.2s;
+        }
+        
+        .dropbtn:hover {
+            color: #1e293b;
         }
 
         .dropdown-content {
@@ -136,15 +405,17 @@
             position: absolute;
             right: 0;
             background-color: white;
-            min-width: 120px;
-            border: 1px solid #ccc;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            min-width: 200px;
+            border-bottom: 1px solid #e2e8f0; border-top: none; border-left: none; border-right: none;
+            border-radius: 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             z-index: 10;
+            overflow: hidden;
         }
 
         .dropdown-content a, .dropdown-content button {
-            color: black;
-            padding: 10px 15px;
+            color: #334155;
+            padding: 12px 18px;
             text-decoration: none;
             display: block;
             width: 100%;
@@ -154,136 +425,482 @@
             cursor: pointer;
             font-family: inherit;
             font-size: 14px;
+            font-weight: 500;
             box-sizing: border-box;
+            white-space: nowrap;
+            transition: background 0.2s;
         }
 
         .dropdown-content a:hover, .dropdown-content button:hover {
-            background-color: #f1f3f4;
-        }
-
-        .dropdown-content button.text-danger {
-            color: #d93025;
-            font-weight: bold;
+            background-color: #f1f5f9;
+            color: #0f172a;
         }
 
         .show { display: block; }
-
-        .back-btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #1f1f1f;
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            margin-bottom: 20px;
-            border-radius: 0;
-        }
-
-        .back-btn:hover {
-            background-color: #444;
-        }
-
-        .folder-title {
-            font-size: 20px;
-            font-weight: 600;
+        
+        /* Error message style */
+        .error-msg {
+            font-size: 12px;
+            color: #fca5a5;
             margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Popup Tambah Folder */
+        .folder-popup-wrapper {
+            position: relative;
+        }
+
+        .folder-popup {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 220px;
+            background: white;
+            border-radius: 0;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            border-bottom: 1px solid #e2e8f0; border-top: none; border-left: none; border-right: none;
+            z-index: 50;
+        }
+
+        .folder-popup.show {
+            display: block;
+        }
+
+        .folder-popup-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0 0 12px 0;
+        }
+
+        .folder-popup-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 0;
+            font-family: inherit;
+            font-size: 13px;
+            color: #1e293b;
+            outline: none;
+            transition: border-color 0.2s ease;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+        }
+
+        .folder-popup-input:focus {
+            border-color: #4a7c8a;
+            box-shadow: 0 0 0 3px rgba(74, 124, 138, 0.1);
+        }
+
+        .folder-popup-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .folder-popup-cancel {
+            padding: 7px 14px;
+            border-bottom: 1px solid #e2e8f0; border-top: none; border-left: none; border-right: none;
+            background: #ffffff;
+            border-radius: 0;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 500;
+            color: #64748b;
+            transition: all 0.2s ease;
+        }
+
+        .folder-popup-cancel:hover {
+            background: #f1f5f9;
+        }
+
+        .folder-popup-submit {
+            padding: 7px 14px;
+            border: none;
+            background: #4a7c8a;
+            border-radius: 0;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .folder-popup-submit:hover {
+            background: #3d6b78;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="sidebar">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 30px; margin-top: 0;">
-            <img src="{{ asset('images/kominfo.png') }}" alt="Logo Kominfo" style="width: 40px; height: 40px; object-fit: contain;">
-            <h2 class="logo-title" style="margin: 0; font-size: 18px;">KOMDRIVE METRO</h2>
+    <div class="header">
+        <div style="display: flex; align-items: center; gap: 12px; width: 220px;">
+            <img src="{{ asset('images/kominfo.png') }}" alt="Logo Kominfo" style="width: 40px; height: 40px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+            <h2 class="logo-title" style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: 0.5px;">KOMSAFE</h2>
         </div>
 
-        <a href="{{ url('/dashboard') }}"
-            style="display: block; padding: 12px; background: white; color: #1f1f1f; border: 2px solid #ccc; text-decoration: none; font-weight: bold; text-align: center; margin-bottom: 20px;">
-            ← Kembali ke Dashboard
-        </a>
-
-        <a href="{{ url('/sampah') }}"
-            style="display: block; padding: 12px; background: #e0e0e0; color: #1f1f1f; border: 2px solid #ccc; text-decoration: none; font-weight: bold; text-align: center; margin-bottom: 20px;">
-            Sampah
-        </a>
-        
-        <form action="{{ url('/logout') }}" method="POST"
-            style="margin-top: auto; display: flex; flex-direction: column;">
-            @csrf
-            <button type="submit" class="logout-btn">Keluar Akun</button>
+        <!-- Form Pencarian (Tengah) -->
+        <form action="{{ url('/dashboard') }}" method="GET" style="display: flex; gap: 12px; flex: 1; max-width: 600px; margin: 0 40px; justify-content: center;">
+            <input type="text" name="telusuri" placeholder="Telusuri folder atau file..."
+                value="{{ request('telusuri') }}" class="search-input" style="flex: 1;">
+            <button type="submit" class="search-btn">
+                Cari
+            </button>
+            @if (request('telusuri'))
+                <a href="{{ url('/dashboard') }}" class="reset-btn">
+                    Reset
+                </a>
+            @endif
         </form>
+
+        <!-- Profil User (Kanan) -->
+        <div class="dropdown profile-dropdown" style="position: relative;">
+            <button onclick="toggleDropdown('profile-menu')" class="dropbtn" style="padding: 0; border-radius: 50%; outline: none;">
+                @if(Auth::user()->avatar)
+                    <img src="{{ Auth::user()->avatar }}" alt="Profile" referrerpolicy="no-referrer" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                @else
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=4a7c8a&color=fff" alt="Profile" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                @endif
+            </button>
+            
+            <!-- Popup Profil & Logout -->
+            <div id="profile-menu" class="dropdown-content" style="right: 0; min-width: 250px; padding: 24px; text-align: center; border-radius: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.12); border: 1px solid #f1f5f9; top: 60px;">
+                <p style="margin: 0 0 16px 0; font-size: 14px; font-weight: 500; color: #475569; word-break: break-all;">
+                    {{ Auth::user()->email }}
+                </p>
+                <div style="margin-bottom: 24px;">
+                    @if(Auth::user()->avatar)
+                        <img src="{{ Auth::user()->avatar }}" alt="Profile" referrerpolicy="no-referrer" style="width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    @else
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=4a7c8a&color=fff" alt="Profile" style="width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    @endif
+                </div>
+            
+                
+                <form action="{{ url('/logout') }}" method="POST" style="margin: 0;">
+                    @csrf
+                    <button type="submit" style="width: 100%; padding: 12px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; border-top: none; border-left: none; border-right: none; border-radius: 0; cursor: pointer; font-size: 14px; font-weight: 600; color: #475569; text-align: center; transition: all 0.2s ease;" onmouseover="this.style.backgroundColor='#f1f5f9'; this.style.color='#0f172a';" onmouseout="this.style.backgroundColor='#f8fafc'; this.style.color='#475569';">
+                        Keluar dari akun
+                    </button>
+                </form>
+            </div>
+            
+        </div>
     </div>
 
-    <div class="main-content">
-
-        <div class="folder-title">Sampah</div>
-        <p style="color: #666; font-size: 14px; margin-bottom: 30px;">Item di sini dapat dipulihkan atau dihapus secara permanen.</p>
-
-        @if ($folders->count() == 0 && $files->count() == 0)
-            <p class="empty-text" style="margin-top: 80px; text-align: center;">Tempat sampah kosong.</p>
-        @else
-            @if ($folders->count() > 0)
-                <div class="section-title">Daftar Folder</div>
-                <div class="folder-grid">
-                @foreach ($folders as $folder)
-                    <div class="folder-card" style="justify-content: space-between;">
-                            <div class="file-name" style="display: flex; align-items: center; gap: 10px; cursor: default; user-select: none;">
-                                <span>📁</span>
-                                <span>{{ $folder->name }}</span>
+    <div class="main-container">
+        <div class="sidebar">
+            <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
+                <div class="folder-popup-wrapper">
+                    <button type="button" class="sidebar-btn" onclick="toggleFolderPopup()">
+                        <img src="{{ asset('images/tambah-folder.png') }}" alt="Tambah Folder" style="width: 20px; height: 20px; object-fit: contain; filter: brightness(0) invert(1);">
+                        Tambah Folder
+                    </button>
+                    <div class="folder-popup" id="folderPopup">
+                        <p class="folder-popup-title">Buat Folder Baru</p>
+                        <form action="{{ url('/folder/create') }}" method="POST">
+                            @csrf
+                            <input type="text" name="name" class="folder-popup-input" id="folderNameInput" placeholder="Nama folder" autocomplete="off" required>
+                            <div class="folder-popup-actions">
+                                <button type="button" class="folder-popup-cancel" onclick="closeFolderPopup()">Batal</button>
+                                <button type="submit" class="folder-popup-submit">Tambah</button>
                             </div>
-                            
-                            <div class="dropdown">
-                                <button onclick="toggleDropdown('folder-{{ $folder->id }}')" class="dropbtn">⋮</button>
-                                <div id="folder-{{ $folder->id }}" class="dropdown-content">
-                                    <form action="{{ url('/sampah/folder/'.$folder->id.'/restore') }}" method="POST" style="margin: 0;">
-                                        @csrf
-                                        <button type="submit">Pulihkan</button>
-                                    </form>
-                                    <form action="{{ url('/sampah/folder/'.$folder->id.'/force-delete') }}" method="POST" style="margin: 0;">
-                                        @csrf
-                                        <button type="submit" class="text-danger">Hapus Permanen</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
+            
+                        </form>
+                    </div>
+            
                 </div>
+            
+
+                <form action="{{ url('/file/upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm" style="margin: 0;">
+                    @csrf
+                    <input type="file" name="file" id="fileInput" style="display: none;" required onchange="document.getElementById('uploadForm').submit();">
+                    <button type="button" class="sidebar-btn-outline" onclick="document.getElementById('fileInput').click();">
+                        <img src="{{ asset('images/upload-file.png') }}" alt="Upload File" style="width: 20px; height: 20px; object-fit: contain; filter: invert(47%) sepia(15%) saturate(841%) hue-rotate(149deg) brightness(92%) contrast(87%);">
+                        Upload File
+                    </button>
+                    @error('file')
+                        <div style="font-size: 12px; color: #d93025; margin-top: 5px; text-align: center;">{{ $message }}</div>
+                    @enderror
+                </form>
+            </div>
+            
+
+            <div class="sidebar-menu">
+                <a href="{{ url('/dashboard') }}" class="sidebar-menu-item">
+                    <img src="{{ asset('images/cloud.png') }}" alt="Drive">
+                    Drive
+                </a>
+                <a href="{{ url('/terbaru') }}" class="sidebar-menu-item">
+                    <img src="{{ asset('images/terbaru.png') }}" alt="Terbaru">
+                    Terbaru
+                </a>
+                <a href="{{ url('/favorit') }}" class="sidebar-menu-item">
+                    <img src="{{ asset('images/dibintangi.png') }}" alt="Favorit">
+                    Favorit
+                </a>
+                <a href="{{ url('/sampah') }}" class="sidebar-menu-item active">
+                    <img src="{{ asset('images/sampah.png') }}" alt="Sampah">
+                    Sampah
+                </a>
+            </div>
+            
+            <!-- Indikator Penyimpanan (Storage Quota) -->
+            @php
+                $usedStorage = \App\Models\FileItem::where('user_id', Auth::id())->sum('size');
+                $quotaBytes = 10 * 1024 * 1024 * 1024; // 10 GB
+                $percentage = ($usedStorage / $quotaBytes) * 100;
+                if ($percentage > 100) $percentage = 100;
+                
+                // Konversi ke satuan yang mudah dibaca (MB / GB)
+                if ($usedStorage >= 1073741824) {
+                    $usedText = number_format($usedStorage / 1073741824, 1) . ' GB';
+                } elseif ($usedStorage >= 1048576) {
+                    $usedText = number_format($usedStorage / 1048576, 1) . ' MB';
+                } elseif ($usedStorage >= 1024) {
+                    $usedText = number_format($usedStorage / 1024, 1) . ' KB';
+                } else {
+                    $usedText = $usedStorage . ' B';
+                }
+            @endphp
+            <div style="margin-top: auto; padding: 20px 5px 0 5px;">
+                <div style="width: 100%; background-color: #cbd5e1; height: 6px; border-radius: 4px; overflow: hidden; margin-bottom: 8px;">
+                    <div style="width: {{ $percentage }}%; background-color: #1a73e8; height: 100%; border-radius: 4px; transition: width 0.3s ease;"></div>
+                </div>
+                <div style="font-size: 13px; color: #475569; font-weight: 500;">
+                    {{ $usedText }} dari 10 GB terpakai
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            
+            @if(session('success') || session('error'))
+                <div id="toast-notification" style="position: fixed; bottom: 30px; right: 30px; background: white; border-bottom: 1px solid #e2e8f0; border-top: none; border-left: none; border-right: none; border-radius: 0; padding: 16px 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; z-index: 9999; animation: slideUp 0.3s ease-out; font-size: 14px; font-weight: 500; color: #1e293b; min-width: 300px; border-left: 4px solid {{ session('success') ? '#10b981' : '#ef4444' }};">
+                    <img src="{{ session('success') ? asset('images/ceklis.png') : asset('images/silang.png') }}" alt="Ikon" style="width: 24px; height: 24px; object-fit: contain;">
+                    <span>{{ session('success') ?? session('error') }}</span>
+                    <button onclick="document.getElementById('toast-notification').style.display='none'" style="margin-left: auto; background: none; border: none; font-size: 20px; cursor: pointer; color: #94a3b8; padding: 0;">&times;</button>
+                </div>
+            
+                <style>
+                    @keyframes slideUp {
+                        from { transform: translateY(100px); opacity: 0; }
+                        to { transform: translateY(0); opacity: 1; }
+                    }
+                </style>
+                
             @endif
 
-            @if ($files->count() > 0)
-                <div class="section-title">Daftar File</div>
-                <div class="grid">
-                    @foreach ($files as $file)
-                        <div class="item-card" style="justify-content: space-between;">
-                            <div class="file-name" style="display: flex; align-items: center; gap: 10px; cursor: default; user-select: none;">
-                                <span>📄</span>
-                                <span>{{ $file->name }}</span>
-                            </div>
+            <!-- JUDUL HALAMAN UTAMA -->
+            <h2 style="font-size: 21px; font-weight: 600; color: #374151; margin-top: 0; margin-bottom: 12px; letter-spacing: -0.3px;">Sampah</h2>
 
-                            <div class="dropdown">
-                                <button onclick="toggleDropdown('file-{{ $file->id }}')" class="dropbtn">⋮</button>
-                                <div id="file-{{ $file->id }}" class="dropdown-content">
-                                    <form action="{{ url('/sampah/file/'.$file->id.'/restore') }}" method="POST" style="margin: 0;">
-                                        @csrf
-                                        <button type="submit">Pulihkan</button>
-                                    </form>
-                                    <form action="{{ url('/sampah/file/'.$file->id.'/force-delete') }}" method="POST" style="margin: 0;">
-                                        @csrf
-                                        <button type="submit" class="text-danger">Hapus Permanen</button>
-                                    </form>
-                                </div>
+            <!-- TOOLBAR WRAPPER -->
+            <div style="position: relative; min-height: 36px; margin-bottom: 12px; display: flex; align-items: center; width: 100%;">
+            
+            <!-- FILTER BAR -->
+            <div id="filter-bar" style="position: absolute; top: 0; left: 0; width: 100%; display: flex; gap: 10px; transition: opacity 0.2s ease, visibility 0.2s ease; opacity: 1; visibility: visible; z-index: 5;">
+                <!-- Type Filter -->
+                <div class="dropdown" style="position: relative;">
+                    <button class="filter-btn" onclick="toggleDropdown('type-filter-menu')" style="background-color: {{ request('type') ? '#e8eaed' : '#f1f5f9' }}; border: 1px solid {{ request('type') ? '#9aa0a6' : '#cbd5e1' }}; border-radius: 4px; padding: 4px 14px; height: 32px; box-sizing: border-box; font-size: 14px; color: #334155; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#e2e8f0'" onmouseout="this.style.backgroundColor='{{ request('type') ? '#e8eaed' : '#f1f5f9' }}'">
+                        {{ request('type') == 'folder' ? 'Folder' : (request('type') == 'file' ? 'File' : 'Jenis') }} <span style="font-size: 10px;">▼</span>
+                    </button>
+                    <div id="type-filter-menu" class="dropdown-content" style="top: 100%; left: 0; min-width: 150px; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                        <a href="{{ url()->current() }}?type=&modified={{ request('modified') }}" style="{{ request('type') == '' ? 'background-color: #f1f5f9; font-weight: 500;' : '' }}">Semua Jenis</a>
+                        <a href="{{ url()->current() }}?type=folder&modified={{ request('modified') }}" style="{{ request('type') == 'folder' ? 'background-color: #f1f5f9; font-weight: 500;' : '' }}">Folder</a>
+                        <a href="{{ url()->current() }}?type=file&modified={{ request('modified') }}" style="{{ request('type') == 'file' ? 'background-color: #f1f5f9; font-weight: 500;' : '' }}">File</a>
+                    </div>
+                </div>
+
+                <!-- Modified Filter -->
+                <div class="dropdown" style="position: relative;">
+                    <button class="filter-btn" onclick="toggleDropdown('modified-filter-menu')" style="background-color: {{ request('modified') ? '#e8eaed' : '#f1f5f9' }}; border: 1px solid {{ request('modified') ? '#9aa0a6' : '#cbd5e1' }}; border-radius: 4px; padding: 4px 14px; height: 32px; box-sizing: border-box; font-size: 14px; color: #334155; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#e2e8f0'" onmouseout="this.style.backgroundColor='{{ request('modified') ? '#e8eaed' : '#f1f5f9' }}'">
+                        @php
+                            $modLabel = match(request('modified')) {
+                                'today' => 'Hari ini',
+                                '7days' => '7 hari terakhir',
+                                '30days' => '30 hari terakhir',
+                                default => 'Dimodifikasi'
+                            };
+                        @endphp
+                        {{ $modLabel }} <span style="font-size: 10px;">▼</span>
+                    </button>
+                    <div id="modified-filter-menu" class="dropdown-content" style="top: 100%; left: 0; min-width: 160px; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                        <a href="{{ url()->current() }}?type={{ request('type') }}&modified=" style="{{ request('modified') == '' ? 'background-color: #f1f5f9; font-weight: 500;' : '' }}">Kapan saja</a>
+                        <a href="{{ url()->current() }}?type={{ request('type') }}&modified=today" style="{{ request('modified') == 'today' ? 'background-color: #f1f5f9; font-weight: 500;' : '' }}">Hari ini</a>
+                        <a href="{{ url()->current() }}?type={{ request('type') }}&modified=7days" style="{{ request('modified') == '7days' ? 'background-color: #f1f5f9; font-weight: 500;' : '' }}">7 hari terakhir</a>
+                        <a href="{{ url()->current() }}?type={{ request('type') }}&modified=30days" style="{{ request('modified') == '30days' ? 'background-color: #f1f5f9; font-weight: 500;' : '' }}">30 hari terakhir</a>
+                    </div>
+                </div>
+            </div>
+
+        <!-- SELECTION BAR -->
+        <div id="selection-bar" style="position: absolute; top: 0; left: 0; width: 100%; height: 32px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 14px; background: #e8f0fe; border: 1px solid #d2e3fc; border-radius: 8px; z-index: 10; transition: opacity 0.2s ease, visibility 0.2s ease; opacity: 0; visibility: hidden;">
+            <button onclick="clearSelection()" style="background:none;border:none;cursor:pointer;font-size:15px;color:#3c4043;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" title="Batalkan pilihan" onmouseover="this.style.background='rgba(60,64,67,0.08)'" onmouseout="this.style.background='none'">&#x2715;</button>
+            <span id="selected-count" style="font-weight:500;color:#3c4043;font-size:14px;margin-right:8px;">0 dipilih</span>
+            <div style="width:1px;height:16px;background:#dadce0;margin-right:8px;"></div>
+            <button onclick="bulkAction('restore')" title="Pulihkan" style="background:none;border:none;cursor:pointer;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='rgba(60,64,67,0.08)'" onmouseout="this.style.background='none'">
+                <img src="{{ asset('images/pulihkan.png') }}" style="width: 16px; height: 16px; opacity: 0.7;">
+            </button>
+            <button onclick="bulkAction('force-delete')" title="Hapus Permanen" style="background:none;border:none;cursor:pointer;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='rgba(60,64,67,0.08)'" onmouseout="this.style.background='none'">
+                <img src="{{ asset('images/silang.png') }}" style="width: 16px; height: 16px; opacity: 0.7;">
+            </button>
+        </div><!-- end selection-bar -->
+            </div><!-- end toolbar-wrapper -->
+
+            
+
+        <!-- HEADER DAFTAR (GRID KOLOM) -->
+        <div class="list-header">
+            <div style="cursor: pointer; display: flex; align-items: center;" onclick="window.location.href='?order={{ (isset($order) && $order === 'desc') ? 'asc' : 'desc' }}'" title="Urutkan {{ (isset($order) && $order === 'desc') ? 'A-Z' : 'Z-A' }}">
+                <span style="margin-right: 8px;">{{ (isset($order) && $order === 'desc') ? '↓' : '↑' }}</span>
+                <span>Nama</span>
+            </div>
+            
+            <div>Tanggal dihapus</div>
+            <div>Tipe</div>
+            <div>Ukuran</div>
+            <div></div> <!-- Kolom kosong untuk titik tiga (menu dropdown) -->
+        </div>
+
+        <!-- CONTAINER DAFTAR ITEM -->
+        <div class="grid">
+
+            
+            <!-- LOOPING FOLDER -->
+            @foreach ($folders as $folder)
+                <div class="item-card" data-id="{{ $folder->id }}" data-type="folder" data-url="{{ url('/folder/' . $folder->id) }}">
+                    <div class="file-name">
+                        <span class="select-checkbox">✓</span>
+                        <img src="{{ asset('images/ikon-folder.png') }}" alt="Folder" style="width: 20px; height: 20px; margin-right: 8px;">
+                        <span>{{ $folder->name }}</span>
+                    </div>
+                    
+                    <div class="item-details">{{ $folder->deleted_at ? $folder->deleted_at->format('d/m/Y, H.i') : '-' }}</div>
+                    <div class="item-details">Folder</div>
+                    <div class="item-details">-</div>
+                    
+                    <div class="item-actions">
+                        <div class="dropdown">
+                            <button onclick="toggleDropdown('folder-{{ $folder->id }}')" class="dropbtn">⋮</button>
+                            <div id="folder-{{ $folder->id }}" class="dropdown-content">
+                                <form action="{{ url('/sampah/folder/'.$folder->id.'/restore') }}" method="POST" style="margin: 0;">
+                                    @csrf
+                                    <button type="submit">Pulihkan</button>
+                                </form>
+                                <form action="{{ url('/sampah/folder/'.$folder->id.'/force-delete') }}" method="POST" style="margin: 0;">
+                                    @csrf
+                                    <button type="submit" class="text-danger">Hapus Permanen</button>
+                                </form>
                             </div>
                         </div>
-                    @endforeach
+                    </div>
                 </div>
+            @endforeach
+
+                @foreach ($files as $file)
+                <div class="item-card" data-id="{{ $file->id }}" data-type="file" data-ext="{{ strtolower(pathinfo($file->name, PATHINFO_EXTENSION)) }}">
+
+                    <!-- Kolom 1: Nama -->
+                    <div class="file-name">
+                        <span class="select-checkbox">✓</span>
+                        <span style="font-size: 18px; margin-right: 8px;">📄</span>
+                        <span>{{ $file->name }}</span>
+                    </div>
+
+                    <!-- Kolom 2: Tanggal -->
+                    <div class="item-details">{{ $file->deleted_at ? $file->deleted_at->format('d/m/Y, H.i') : '-' }}</div>
+                    
+                    <!-- Kolom 3: Tipe -->
+                    <div class="item-details">{{ pathinfo($file->name, PATHINFO_EXTENSION) ? strtoupper(pathinfo($file->name, PATHINFO_EXTENSION)) . ' File' : 'File' }}</div>
+                    
+                    <!-- Kolom 4: Ukuran -->
+                    <div class="item-details">
+                        @php
+                            $sizeInBytes = $file->size ?? 0;
+                            if ($sizeInBytes == 0 && $file->file_path) {
+                                $physicalPath = storage_path('app/private/' . $file->file_path);
+                                if (!file_exists($physicalPath)) {
+                                    $physicalPath = storage_path('app/' . $file->file_path);
+                                }
+                                if (file_exists($physicalPath)) {
+                                    $sizeInBytes = filesize($physicalPath);
+                                    $file->update(['size' => $sizeInBytes]);
+                                }
+                            }
+                            if ($sizeInBytes >= 1048576) {
+                                echo number_format($sizeInBytes / 1048576, 2) . ' MB';
+                            } elseif ($sizeInBytes >= 1024) {
+                                echo number_format($sizeInBytes / 1024, 2) . ' KB';
+                            } elseif ($sizeInBytes > 0) {
+                                echo $sizeInBytes . ' B';
+                            } else {
+                                echo '-';
+                            }
+                        @endphp
+                    </div>
+
+                    <!-- Kolom 5: Menu Action -->
+                    <div class="dropdown">
+                        <button onclick="toggleDropdown('file-{{ $file->id }}')" class="dropbtn">⋮</button>
+                        <div id="file-{{ $file->id }}" class="dropdown-content">
+                            <form action="{{ url('/sampah/file/'.$file->id.'/restore') }}" method="POST" style="margin: 0;">
+                                @csrf
+                                <button type="submit">Pulihkan</button>
+                            </form>
+                            <form action="{{ url('/sampah/file/'.$file->id.'/force-delete') }}" method="POST" style="margin: 0;">
+                                @csrf
+                                <button type="submit" class="text-danger">Hapus Permanen</button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+                @endforeach
+
+            <!-- PESAN JIKA KOSONG -->
+            @if ($folders->isEmpty() && $files->isEmpty())
+                <p class="empty-text">
+                    @if(request('type') == 'folder')
+                        Tidak ada folder di halaman Terbaru.
+                    @elseif(request('type') == 'file')
+                        Tidak ada file yang ditemukan.
+                    @else
+                        Tempat sampah kosong.
+                    @endif
+                </p>
             @endif
-        @endif
+
+        </div>
         
+    </div>
     </div>
 
     <script>
+        // Popup Tambah Folder
+        function toggleFolderPopup() {
+            var popup = document.getElementById('folderPopup');
+            var btn = document.querySelector('.folder-popup-wrapper .sidebar-btn');
+            popup.classList.toggle('show');
+            btn.classList.toggle('active', popup.classList.contains('show'));
+            if (popup.classList.contains('show')) {
+                setTimeout(function() {
+                    document.getElementById('folderNameInput').focus();
+                }, 100);
+            }
+        }
+
+        function closeFolderPopup() {
+            document.getElementById('folderPopup').classList.remove('show');
+            document.querySelector('.folder-popup-wrapper .sidebar-btn').classList.remove('active');
+            document.getElementById('folderNameInput').value = '';
+        }
+
         function toggleDropdown(id) {
             var dropdowns = document.getElementsByClassName("dropdown-content");
             for (var i = 0; i < dropdowns.length; i++) {
@@ -295,18 +912,155 @@
         }
 
         window.onclick = function(event) {
-            if (!event.target.matches('.dropbtn')) {
+            // Tutup dropdown
+            if (!event.target.closest('.dropbtn') && !event.target.closest('.filter-btn')) {
                 var dropdowns = document.getElementsByClassName("dropdown-content");
                 for (var i = 0; i < dropdowns.length; i++) {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
+                    dropdowns[i].classList.remove('show');
+                }
+            }
+            // Tutup folder popup saat klik di luar
+            if (!event.target.closest('.folder-popup-wrapper')) {
+                closeFolderPopup();
+            }
+        }
+
+                function previewFile(id, ext) {
+            window.open('/files/' + id, '_blank');
+        }
+
+        // ===== MULTI-SELECT SYSTEM =====
+        var _sel = new Map();
+        var _lastIdx = -1;
+
+        function _cards() {
+            return Array.from(document.querySelectorAll('.item-card[data-id]'));
+        }
+        function _key(el) { return el.dataset.type + '-' + el.dataset.id; }
+
+        function _selectCard(el) {
+            _sel.set(_key(el), {id: el.dataset.id, type: el.dataset.type});
+            el.classList.add('selected');
+            
+        }
+        function _deselectCard(el) {
+            _sel.delete(_key(el));
+            el.classList.remove('selected');
+            
+        }
+        function _toggleCard(el) {
+            if (_sel.has(_key(el))) _deselectCard(el); else _selectCard(el);
+        }
+        function clearSelection() {
+            _cards().forEach(function(el){ _deselectCard(el); });
+            _sel.clear(); _lastIdx = -1; _updateBar();
+        }
+        function _selectRange(a, b) {
+            var cs = _cards(), s = Math.min(a,b), e = Math.max(a,b);
+            for (var i = s; i <= e; i++) _selectCard(cs[i]);
+        }
+        function _updateBar() {
+            var bar = document.getElementById('selection-bar');
+            var filterBar = document.getElementById('filter-bar');
+            var cnt = document.getElementById('selected-count');
+            if (_sel.size > 0) {
+                bar.style.opacity = '1';
+                bar.style.visibility = 'visible';
+                if(filterBar) {
+                    filterBar.style.opacity = '0';
+                    filterBar.style.visibility = 'hidden';
+                }
+                cnt.textContent = _sel.size + ' dipilih';
+            } else {
+                bar.style.opacity = '0';
+                bar.style.visibility = 'hidden';
+                if(filterBar) {
+                    filterBar.style.opacity = '1';
+                    filterBar.style.visibility = 'visible';
                 }
             }
         }
+        function bulkAction(action) {
+            if (_sel.size === 0) return;
+            if (action === 'force-delete' && !confirm('Hapus permanen ' + _sel.size + ' item? Tidak dapat dibatalkan!')) return;
+            var folderIds = [], fileIds = [];
+            _sel.forEach(function(v){ if(v.type==='folder') folderIds.push(v.id); else fileIds.push(v.id); });
+            var form = document.createElement('form');
+            form.method = 'POST'; form.action = '/bulk/' + action; form.style.display = 'none';
+            var t = document.createElement('input'); t.type='hidden'; t.name='_token';
+            t.value = document.querySelector('meta[name="csrf-token"]').content;
+            form.appendChild(t);
+            folderIds.forEach(function(id){ var i=document.createElement('input'); i.type='hidden'; i.name='folder_ids[]'; i.value=id; form.appendChild(i); });
+            fileIds.forEach(function(id){ var i=document.createElement('input'); i.type='hidden'; i.name='file_ids[]'; i.value=id; form.appendChild(i); });
+            document.body.appendChild(form); form.submit();
+        }
+
+        // Init selection on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Timer per-item: Map keyed by card element
+            var _clickTimers = new Map();
+
+            _cards().forEach(function(card, idx) {
+
+                card.addEventListener('click', function(e) {
+                    if (e.target.closest('.dropdown') || e.target.closest('.dropbtn')) return;
+
+                    if (_clickTimers.has(card)) {
+                        // === Klik 2x pada item SAMA: Preview file ===
+                        clearTimeout(_clickTimers.get(card));
+                        _clickTimers.delete(card);
+                        if (card.dataset.type === 'file') {
+                            previewFile(card.dataset.id, card.dataset.ext);
+                        } else if (card.dataset.type === 'folder' && card.dataset.url) {
+                            window.location.href = card.dataset.url;
+                        }
+                        return;
+                    }
+
+                    // === Klik 1x: Langsung seleksi ===
+                    if (e.shiftKey && _lastIdx !== -1) {
+                        _selectRange(_lastIdx, idx);
+                    } else {
+                        if (e.target.classList.contains('select-checkbox')) {
+                            _toggleCard(card);
+                        } else {
+                            _selectCard(card);
+                        }
+                    }
+                    _lastIdx = idx; _updateBar();
+
+                    _clickTimers.set(card, setTimeout(function() {
+                        _clickTimers.delete(card);
+                    }, 300));
+                });
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.shiftKey && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+                    e.preventDefault();
+                    var cs = _cards(); if (!cs.length) return;
+                    var ni = _lastIdx === -1 ? (e.key==='ArrowDown'?0:cs.length-1)
+                           : (e.key==='ArrowDown' ? Math.min(_lastIdx+1,cs.length-1) : Math.max(_lastIdx-1,0));
+                    _selectCard(cs[ni]); _lastIdx = ni; _updateBar();
+                    cs[ni].scrollIntoView({block:'nearest', behavior:'smooth'});
+                }
+                if (e.key === 'Escape') clearSelection();
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.item-card') && !e.target.closest('#selection-bar') && !e.target.closest('.dropdown-content')) {
+                    clearSelection();
+                }
+            });
+        });
     </script>
-
 </body>
-
 </html>
+
+
+
+
+
+
+
+

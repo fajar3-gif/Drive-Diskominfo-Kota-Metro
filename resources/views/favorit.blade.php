@@ -633,7 +633,7 @@
             
 
             <div class="sidebar-menu">
-                <a href="{{ url('/dashboard') }}" class="sidebar-menu-item active">
+                <a href="{{ url('/dashboard') }}" class="sidebar-menu-item">
                     <img src="{{ asset('images/cloud.png') }}" alt="Drive">
                     Drive
                 </a>
@@ -641,7 +641,7 @@
                     <img src="{{ asset('images/terbaru.png') }}" alt="Terbaru">
                     Terbaru
                 </a>
-                <a href="{{ url('/favorit') }}" class="sidebar-menu-item">
+                <a href="{{ url('/favorit') }}" class="sidebar-menu-item active">
                     <img src="{{ asset('images/dibintangi.png') }}" alt="Favorit">
                     Favorit
                 </a>
@@ -698,19 +698,7 @@
             @endif
 
             <!-- JUDUL HALAMAN UTAMA -->
-            
-<div style="display: flex; align-items: center; gap: 4px; margin-bottom: 12px; flex-wrap: wrap;">
-    <a href="{{ url('/dashboard') }}" style="text-decoration: none; color: #5f6368; font-size: 18px; font-weight: 500; padding: 2px 6px; border-radius: 4px; transition: background 0.15s;" onmouseover="this.style.backgroundColor='#f1f5f9'" onmouseout="this.style.backgroundColor='transparent'">Drive</a>
-    @foreach($breadcrumbs as $crumb)
-        <span style="color: #9aa0a6; font-size: 18px; margin: 0 2px;">›</span>
-        @if(!$loop->last)
-            <a href="{{ url('/folder/show/' . $crumb->id) }}" style="text-decoration: none; color: #5f6368; font-size: 18px; font-weight: 500; padding: 2px 6px; border-radius: 4px; transition: background 0.15s;" onmouseover="this.style.backgroundColor='#f1f5f9'" onmouseout="this.style.backgroundColor='transparent'">{{ $crumb->name }}</a>
-        @else
-            <span style="font-size: 18px; font-weight: 600; color: #202124; padding: 2px 6px;">{{ $crumb->name }}</span>
-        @endif
-    @endforeach
-</div>
-
+            <h2 style="font-size: 21px; font-weight: 600; color: #374151; margin-top: 0; margin-bottom: 12px; letter-spacing: -0.3px;">Favorit</h2>
 
             <!-- TOOLBAR WRAPPER -->
             <div style="position: relative; min-height: 36px; margin-bottom: 12px; display: flex; align-items: center; width: 100%;">
@@ -783,18 +771,18 @@
         <div class="grid">
 
             <!-- LOOPING FILE -->
-            @foreach ($folders as $subfolder)
-                    <div class="item-card" data-id="{{ $subfolder->id }}" data-type="folder" data-url="{{ url('/folder/show/' . $subfolder->id) }}">
+            @foreach ($folders as $folder)
+                    <div class="item-card" data-id="{{ $folder->id }}" data-type="folder" data-url="{{ url('/folder/show/' . $folder->id) }}">
 
                         <!-- Kolom 1: Nama -->
                         <div class="file-name">
                             <span class="select-checkbox">✓</span>
                             <img src="{{ asset('images/ikon-folder.png') }}" alt="Folder" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;">
-                            <span>{{ $subfolder->name }}</span>
+                            <span>{{ $folder->name }}</span>
                         </div>
                         
                         <!-- Kolom 2: Tanggal -->
-                        <div class="item-details">{{ $subfolder->created_at ? $subfolder->created_at->format('d/m/Y, H.i') : '-' }}</div>
+                        <div class="item-details">{{ $folder->created_at ? $folder->created_at->format('d/m/Y, H.i') : '-' }}</div>
                         
                         <!-- Kolom 3: Tipe -->
                         <div class="item-details">Folder</div>
@@ -815,17 +803,17 @@
                         
                         <!-- Kolom 5: Menu Action -->
                         <div class="dropdown">
-                            <button onclick="toggleDropdown('folder-{{ $subfolder->id }}')" class="dropbtn">⋮</button>
-                            <div id="folder-{{ $subfolder->id }}" class="dropdown-content">
+                            <button onclick="toggleDropdown('folder-{{ $folder->id }}')" class="dropbtn">⋮</button>
+                            <div id="folder-{{ $folder->id }}" class="dropdown-content">
                                 <a href="#">Download</a>
-                                <form action="{{ url('/folder/'.$subfolder->id.'/delete') }}" method="POST" style="margin: 0;">
+                                <form action="{{ url('/folder/'.$folder->id.'/delete') }}" method="POST" style="margin: 0;">
                                     @csrf
                                     <button type="submit">Hapus</button>
                                 </form>
-                                <form action="{{ url('/folder/'.$subfolder->id.'/favorite') }}" method="POST" style="margin: 0;">
+                                <form action="{{ url('/folder/'.$folder->id.'/favorite') }}" method="POST" style="margin: 0;">
                                     @csrf
                                     <button type="submit" style="display: flex; align-items: center; gap: 8px;">
-                                        @if($subfolder->is_favorite ?? false)
+                                        @if($folder->is_favorite ?? false)
                                             <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
                                             Hapus dari favorit
                                         @else
