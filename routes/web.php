@@ -8,12 +8,11 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'storeRegister']);
-
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'authenticate']);
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'storeRegister']);
 });
     // --- ROUTE LUPA PASSWORD & RESET PASSWORD ---
     Route::get('/lupa-password', [AuthController::class, 'showForgotForm'])->name('password.request');

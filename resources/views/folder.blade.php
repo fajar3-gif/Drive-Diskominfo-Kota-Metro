@@ -20,7 +20,9 @@
 
         .header {
             background: linear-gradient(135deg, #4a7c8a 0%, #5a8f9e 20%, #7baab5 40%, #a8c8cf 60%, #6a9aaa 80%, #4a7080 100%);
-            padding: 10px 40px;
+            padding: 0 40px;
+            height: 68px;
+            box-sizing: border-box;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -546,12 +548,14 @@
         </div>
 
         <!-- Form Pencarian (Tengah) -->
-        <form action="{{ url('/dashboard') }}" method="GET" style="display: flex; gap: 12px; flex: 1; max-width: 600px; margin: 0 40px; justify-content: center;">
-            <input type="text" name="telusuri" placeholder="Telusuri folder atau file..."
-                value="{{ request('telusuri') }}" class="search-input" style="flex: 1;">
-            <button type="submit" class="search-btn">
-                Cari
-            </button>
+        <form action="{{ url('/dashboard') }}" method="GET" style="display: flex; gap: 12px; flex: 1; max-width: 600px; margin: 0 40px; justify-content: center; align-items: center;">
+            <div style="position: relative; flex: 1; display: flex; align-items: center;">
+                <button type="submit" style="position: absolute; left: 14px; background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center;" title="Cari">
+                    <img src="{{ asset('images/telusuri.png') }}" alt="Cari" style="width: 20px; height: 20px; opacity: 0.6; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+                </button>
+                <input type="text" name="telusuri" placeholder="Telusuri folder atau file..."
+                    value="{{ request('telusuri') }}" class="search-input" style="width: 100%; padding-left: 44px; box-sizing: border-box;">
+            </div>
             @if (request('telusuri'))
                 <a href="{{ url('/dashboard') }}" class="reset-btn">
                     Reset
@@ -633,19 +637,19 @@
             
 
             <div class="sidebar-menu">
-                <a href="{{ url('/dashboard') }}" class="sidebar-menu-item active">
+                <a href="{{ url('/dashboard') }}" class="sidebar-menu-item {{ !request('source') || request('source') == 'drive' ? 'active' : '' }}">
                     <img src="{{ asset('images/cloud.png') }}" alt="Drive">
                     Drive
                 </a>
-                <a href="{{ url('/terbaru') }}" class="sidebar-menu-item">
+                <a href="{{ url('/terbaru') }}" class="sidebar-menu-item {{ request('source') == 'terbaru' ? 'active' : '' }}">
                     <img src="{{ asset('images/terbaru.png') }}" alt="Terbaru">
                     Terbaru
                 </a>
-                <a href="{{ url('/favorit') }}" class="sidebar-menu-item">
+                <a href="{{ url('/favorit') }}" class="sidebar-menu-item {{ request('source') == 'favorit' ? 'active' : '' }}">
                     <img src="{{ asset('images/dibintangi.png') }}" alt="Favorit">
                     Favorit
                 </a>
-                <a href="{{ url('/sampah') }}" class="sidebar-menu-item">
+                <a href="{{ url('/sampah') }}" class="sidebar-menu-item {{ request('source') == 'sampah' ? 'active' : '' }}">
                     <img src="{{ asset('images/sampah.png') }}" alt="Sampah">
                     Sampah
                 </a>
@@ -654,7 +658,7 @@
             <!-- Indikator Penyimpanan (Storage Quota) -->
             @php
                 $usedStorage = \App\Models\FileItem::where('user_id', Auth::id())->sum('size');
-                $quotaBytes = 10 * 1024 * 1024 * 1024; // 10 GB
+                $quotaBytes = 1 * 1024 * 1024 * 1024; // 1 GB
                 $percentage = ($usedStorage / $quotaBytes) * 100;
                 if ($percentage > 100) $percentage = 100;
                 
@@ -674,7 +678,7 @@
                     <div style="width: {{ $percentage }}%; background-color: #1a73e8; height: 100%; border-radius: 4px; transition: width 0.3s ease;"></div>
                 </div>
                 <div style="font-size: 13px; color: #475569; font-weight: 500;">
-                    {{ $usedText }} dari 10 GB terpakai
+                    {{ $usedText }} dari 1 GB terpakai
                 </div>
             </div>
         </div>
@@ -699,14 +703,29 @@
 
             <!-- JUDUL HALAMAN UTAMA -->
             
-<div style="display: flex; align-items: center; gap: 4px; margin-bottom: 12px; flex-wrap: wrap;">
-    <a href="{{ url('/dashboard') }}" style="text-decoration: none; color: #5f6368; font-size: 18px; font-weight: 500; padding: 2px 6px; border-radius: 4px; transition: background 0.15s;" onmouseover="this.style.backgroundColor='#f1f5f9'" onmouseout="this.style.backgroundColor='transparent'">Drive</a>
+<div style="display: flex; align-items: center; gap: 4px; margin-bottom: 12px; flex-wrap: wrap; font-size: 21px; letter-spacing: -0.3px;">
+    @php
+        $source = request('source');
+        $rootName = 'Drive';
+        $rootUrl = url('/dashboard');
+        if ($source == 'favorit') {
+            $rootName = 'Favorit';
+            $rootUrl = url('/favorit');
+        } elseif ($source == 'terbaru') {
+            $rootName = 'Terbaru';
+            $rootUrl = url('/terbaru');
+        } elseif ($source == 'sampah') {
+            $rootName = 'Sampah';
+            $rootUrl = url('/sampah');
+        }
+    @endphp
+    <a href="{{ $rootUrl }}" style="text-decoration: none; color: #5f6368; font-weight: 500; padding: 2px 6px; border-radius: 4px; transition: background 0.15s;" onmouseover="this.style.backgroundColor='#f1f5f9'" onmouseout="this.style.backgroundColor='transparent'">{{ $rootName }}</a>
     @foreach($breadcrumbs as $crumb)
-        <span style="color: #9aa0a6; font-size: 18px; margin: 0 2px;">›</span>
+        <span style="color: #9aa0a6; margin: 0 2px;">›</span>
         @if(!$loop->last)
-            <a href="{{ url('/folder/show/' . $crumb->id) }}" style="text-decoration: none; color: #5f6368; font-size: 18px; font-weight: 500; padding: 2px 6px; border-radius: 4px; transition: background 0.15s;" onmouseover="this.style.backgroundColor='#f1f5f9'" onmouseout="this.style.backgroundColor='transparent'">{{ $crumb->name }}</a>
+            <a href="{{ url('/folder/show/' . $crumb->id) }}{{ $source ? '?source='.$source : '' }}" style="text-decoration: none; color: #5f6368; font-weight: 500; padding: 2px 6px; border-radius: 4px; transition: background 0.15s;" onmouseover="this.style.backgroundColor='#f1f5f9'" onmouseout="this.style.backgroundColor='transparent'">{{ $crumb->name }}</a>
         @else
-            <span style="font-size: 18px; font-weight: 600; color: #202124; padding: 2px 6px;">{{ $crumb->name }}</span>
+            <span style="font-weight: 600; color: #374151; padding: 2px 6px;">{{ $crumb->name }}</span>
         @endif
     @endforeach
 </div>
@@ -784,7 +803,7 @@
 
             <!-- LOOPING FILE -->
             @foreach ($folders as $subfolder)
-                    <div class="item-card" data-id="{{ $subfolder->id }}" data-type="folder" data-url="{{ url('/folder/show/' . $subfolder->id) }}">
+                    <div class="item-card" data-id="{{ $subfolder->id }}" data-type="folder" data-url="{{ url('/folder/show/' . $subfolder->id) }}{{ request('source') ? '?source='.request('source') : '' }}">
 
                         <!-- Kolom 1: Nama -->
                         <div class="file-name">

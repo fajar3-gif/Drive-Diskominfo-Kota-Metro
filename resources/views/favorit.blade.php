@@ -20,7 +20,9 @@
 
         .header {
             background: linear-gradient(135deg, #4a7c8a 0%, #5a8f9e 20%, #7baab5 40%, #a8c8cf 60%, #6a9aaa 80%, #4a7080 100%);
-            padding: 10px 40px;
+            padding: 0 40px;
+            height: 68px;
+            box-sizing: border-box;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -546,12 +548,14 @@
         </div>
 
         <!-- Form Pencarian (Tengah) -->
-        <form action="{{ url('/dashboard') }}" method="GET" style="display: flex; gap: 12px; flex: 1; max-width: 600px; margin: 0 40px; justify-content: center;">
-            <input type="text" name="telusuri" placeholder="Telusuri folder atau file..."
-                value="{{ request('telusuri') }}" class="search-input" style="flex: 1;">
-            <button type="submit" class="search-btn">
-                Cari
-            </button>
+        <form action="{{ url('/dashboard') }}" method="GET" style="display: flex; gap: 12px; flex: 1; max-width: 600px; margin: 0 40px; justify-content: center; align-items: center;">
+            <div style="position: relative; flex: 1; display: flex; align-items: center;">
+                <button type="submit" style="position: absolute; left: 14px; background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center;" title="Cari">
+                    <img src="{{ asset('images/telusuri.png') }}" alt="Cari" style="width: 20px; height: 20px; opacity: 0.6; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+                </button>
+                <input type="text" name="telusuri" placeholder="Telusuri folder atau file..."
+                    value="{{ request('telusuri') }}" class="search-input" style="width: 100%; padding-left: 44px; box-sizing: border-box;">
+            </div>
             @if (request('telusuri'))
                 <a href="{{ url('/dashboard') }}" class="reset-btn">
                     Reset
@@ -654,7 +658,7 @@
             <!-- Indikator Penyimpanan (Storage Quota) -->
             @php
                 $usedStorage = \App\Models\FileItem::where('user_id', Auth::id())->sum('size');
-                $quotaBytes = 10 * 1024 * 1024 * 1024; // 10 GB
+                $quotaBytes = 1 * 1024 * 1024 * 1024; // 1 GB
                 $percentage = ($usedStorage / $quotaBytes) * 100;
                 if ($percentage > 100) $percentage = 100;
                 
@@ -674,7 +678,7 @@
                     <div style="width: {{ $percentage }}%; background-color: #1a73e8; height: 100%; border-radius: 4px; transition: width 0.3s ease;"></div>
                 </div>
                 <div style="font-size: 13px; color: #475569; font-weight: 500;">
-                    {{ $usedText }} dari 10 GB terpakai
+                    {{ $usedText }} dari 1 GB terpakai
                 </div>
             </div>
         </div>
@@ -772,7 +776,7 @@
 
             <!-- LOOPING FILE -->
             @foreach ($folders as $folder)
-                    <div class="item-card" data-id="{{ $folder->id }}" data-type="folder" data-url="{{ url('/folder/show/' . $folder->id) }}">
+                    <div class="item-card" data-id="{{ $folder->id }}" data-type="folder" data-url="{{ url('/folder/show/' . $folder->id) }}?source=favorit">
 
                         <!-- Kolom 1: Nama -->
                         <div class="file-name">
@@ -788,17 +792,20 @@
                         <div class="item-details">Folder</div>
                         
                         <!-- Kolom 4: Ukuran -->
-                        <div class="item-details">
-                            @php
-                                $sizeInBytes = $folder->size ?? 0;
-                                if ($sizeInBytes >= 1048576) {
-                                    echo number_format($sizeInBytes / 1048576, 2) . ' MB';
-                                } elseif ($sizeInBytes >= 1024) {
-                                    echo number_format($sizeInBytes / 1024, 2) . ' KB';
-                                } else {
-                                    echo $sizeInBytes . ' B';
-                                }
-                            @endphp
+                        <div class="item-details" style="display: flex; align-items: center; gap: 8px;">
+                            <span>
+                                @php
+                                    $sizeInBytes = $folder->size ?? 0;
+                                    if ($sizeInBytes >= 1048576) {
+                                        echo number_format($sizeInBytes / 1048576, 2) . ' MB';
+                                    } elseif ($sizeInBytes >= 1024) {
+                                        echo number_format($sizeInBytes / 1024, 2) . ' KB';
+                                    } else {
+                                        echo $sizeInBytes . ' B';
+                                    }
+                                @endphp
+                            </span>
+                            <img src="{{ asset('images/dibintangi.png') }}" alt="Favorit" style="width: 16px; height: 16px;">
                         </div>
                         
                         <!-- Kolom 5: Menu Action -->
@@ -847,29 +854,32 @@
                     <div class="item-details">{{ pathinfo($file->name, PATHINFO_EXTENSION) ? strtoupper(pathinfo($file->name, PATHINFO_EXTENSION)) . ' File' : 'File' }}</div>
                     
                     <!-- Kolom 4: Ukuran -->
-                    <div class="item-details">
-                        @php
-                            $sizeInBytes = $file->size ?? 0;
-                            if ($sizeInBytes == 0 && $file->file_path) {
-                                $physicalPath = storage_path('app/private/' . $file->file_path);
-                                if (!file_exists($physicalPath)) {
-                                    $physicalPath = storage_path('app/' . $file->file_path);
+                    <div class="item-details" style="display: flex; align-items: center; gap: 8px;">
+                        <span>
+                            @php
+                                $sizeInBytes = $file->size ?? 0;
+                                if ($sizeInBytes == 0 && $file->file_path) {
+                                    $physicalPath = storage_path('app/private/' . $file->file_path);
+                                    if (!file_exists($physicalPath)) {
+                                        $physicalPath = storage_path('app/' . $file->file_path);
+                                    }
+                                    if (file_exists($physicalPath)) {
+                                        $sizeInBytes = filesize($physicalPath);
+                                        $file->update(['size' => $sizeInBytes]);
+                                    }
                                 }
-                                if (file_exists($physicalPath)) {
-                                    $sizeInBytes = filesize($physicalPath);
-                                    $file->update(['size' => $sizeInBytes]);
+                                if ($sizeInBytes >= 1048576) {
+                                    echo number_format($sizeInBytes / 1048576, 2) . ' MB';
+                                } elseif ($sizeInBytes >= 1024) {
+                                    echo number_format($sizeInBytes / 1024, 2) . ' KB';
+                                } elseif ($sizeInBytes > 0) {
+                                    echo $sizeInBytes . ' B';
+                                } else {
+                                    echo '-';
                                 }
-                            }
-                            if ($sizeInBytes >= 1048576) {
-                                echo number_format($sizeInBytes / 1048576, 2) . ' MB';
-                            } elseif ($sizeInBytes >= 1024) {
-                                echo number_format($sizeInBytes / 1024, 2) . ' KB';
-                            } elseif ($sizeInBytes > 0) {
-                                echo $sizeInBytes . ' B';
-                            } else {
-                                echo '-';
-                            }
-                        @endphp
+                            @endphp
+                        </span>
+                        <img src="{{ asset('images/dibintangi.png') }}" alt="Favorit" style="width: 16px; height: 16px;">
                     </div>
             
 

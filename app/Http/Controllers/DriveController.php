@@ -114,15 +114,25 @@ class DriveController extends Controller
         ]);
 
         $file = $request->file('file');
-        $fileName = $file->getClientOriginalName();
+
+        // --- KEAMANAN: SANITASI NAMA FILE (Mencegah Path Traversal) ---
+        // Hapus karakter berbahaya seperti ../, \, null byte, dll.
+        $rawName = $file->getClientOriginalName();
+        $fileName = basename($rawName);                          // Hapus path traversal (../)
+        $fileName = preg_replace('/[^\w\s\-.]/', '', $fileName); // Hanya izinkan karakter aman
+        $fileName = preg_replace('/\s+/', '_', $fileName);       // Ganti spasi dengan underscore
+        if (empty($fileName)) {
+            $fileName = 'file_' . time();
+        }
+
         $clientExt = strtolower($file->getClientOriginalExtension());
         
         // --- 1. CEK KUOTA PENYIMPANAN (10 GB) ---
-        $quotaBytes = 10 * 1024 * 1024 * 1024; // 10 GB
+        $quotaBytes = 1 * 1024 * 1024 * 1024; // 1 GB
         $usedStorage = \App\Models\FileItem::where('user_id', Auth::id())->sum('size');
         
         if (($usedStorage + $file->getSize()) > $quotaBytes) {
-            return back()->with('error', 'Kapasitas Penyimpanan Penuh! Batas maksimal Anda adalah 10 GB.');
+            return back()->with('error', 'Kapasitas Penyimpanan Penuh! Batas maksimal Anda adalah 1 GB.');
         }
 
         // --- 2. CEK FILE KOSONG ---
@@ -135,7 +145,7 @@ class DriveController extends Controller
             if (count($segments) > 2) {
                 $lastExt = strtolower(end($segments));
                 $secondLastExt = strtolower($segments[count($segments)-2]);
-                if (in_array($lastExt, ['exe', 'php', 'sh', 'bat']) && in_array($secondLastExt, ['pdf', 'doc', 'docx', 'jpg', 'png'])) {
+                if (in_array($lastExt, ['exe', 'php', 'sh', 'bat', 'cmd', 'ps1']) && in_array($secondLastExt, ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'jpg', 'png', 'mp4'])) {
                     return back()->with('error', 'Keamanan: Terdeteksi Double Extension (Spoofing). File ditolak.');
                 }
             }
@@ -148,31 +158,77 @@ class DriveController extends Controller
             // Catatan: Sesuai konsep Universal Web Drive, file script/program seperti .php atau .exe 
             // diizinkan selama mereka "jujur" (tidak disamarkan sebagai file lain).
 
-            // Cek spoofing spesifik (Misal ngaku PDF tapi Magic Number-nya bukan PDF)
+            // Cek spoofing PDF (Misal ngaku PDF tapi Magic Number-nya bukan PDF)
             if ($clientExt === 'pdf' && $realMime !== 'application/pdf') {
                 return back()->with('error', 'Keamanan: Spoofing terdeteksi. Magic Number file ini bukan PDF asli.');
             }
 
-            // Cek spoofing gambar (Misal ngaku JPG tapi Magic Number-nya bukan gambar)
-            if (in_array($clientExt, ['jpg', 'jpeg', 'png', 'gif']) && !str_starts_with($realMime, 'image/')) {
+            // Cek spoofing gambar raster (JPG/PNG/GIF/WEBP)
+            if (in_array($clientExt, ['jpg', 'jpeg', 'png', 'gif', 'webp']) && !str_starts_with($realMime, 'image/')) {
                 return back()->with('error', 'Keamanan: Spoofing terdeteksi. Magic Number file ini bukan gambar asli.');
+            }
+
+            // Cek spoofing SVG (harus bertipe image/svg+xml)
+            if ($clientExt === 'svg' && $realMime !== 'image/svg+xml') {
+                return back()->with('error', 'Keamanan: Spoofing terdeteksi. File ini bukan SVG asli.');
+            }
+
+            // Cek spoofing Office BARU (.docx/.xlsx/.pptx) — Magic Number-nya ZIP
+            if (in_array($clientExt, ['docx', 'xlsx', 'pptx']) && !in_array($realMime, [
+                'application/zip',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+            ])) {
+                return back()->with('error', 'Keamanan: Spoofing terdeteksi. Isi file ini bukan dokumen Office (.docx/.xlsx/.pptx) asli.');
+            }
+
+            // Cek spoofing Office LAMA (.doc/.xls/.ppt) — Magic Number Compound Document (OLE)
+            if ($clientExt === 'doc' && !in_array($realMime, ['application/msword', 'application/vnd.ms-word'])) {
+                return back()->with('error', 'Keamanan: Spoofing terdeteksi. File ini bukan dokumen Word (.doc) asli.');
+            }
+            if ($clientExt === 'xls' && !in_array($realMime, ['application/vnd.ms-excel', 'application/excel'])) {
+                return back()->with('error', 'Keamanan: Spoofing terdeteksi. File ini bukan spreadsheet Excel (.xls) asli.');
+            }
+            if (in_array($clientExt, ['ppt', 'pptx']) && $clientExt === 'ppt' && !in_array($realMime, ['application/vnd.ms-powerpoint', 'application/powerpoint'])) {
+                return back()->with('error', 'Keamanan: Spoofing terdeteksi. File ini bukan presentasi PowerPoint (.ppt) asli.');
+            }
+
+            // Cek spoofing ZIP / RAR
+            if ($clientExt === 'zip' && !in_array($realMime, ['application/zip', 'application/x-zip-compressed', 'application/octet-stream'])) {
+                return back()->with('error', 'Keamanan: Spoofing terdeteksi. Magic Number file ini bukan ZIP asli.');
+            }
+            if ($clientExt === 'rar' && !in_array($realMime, ['application/x-rar-compressed', 'application/vnd.rar', 'application/octet-stream'])) {
+                return back()->with('error', 'Keamanan: Spoofing terdeteksi. Magic Number file ini bukan RAR asli.');
+            }
+
+            // Cek spoofing Video (.mp4, .avi, .mkv, .mov, .webm)
+            if (in_array($clientExt, ['mp4', 'avi', 'mkv', 'mov', 'webm']) && !str_starts_with($realMime, 'video/')) {
+                return back()->with('error', 'Keamanan: Spoofing terdeteksi. Magic Number file ini bukan video asli.');
+            }
+
+            // Cek spoofing Audio (.mp3, .wav, .ogg, .flac, .aac)
+            if (in_array($clientExt, ['mp3', 'wav', 'ogg', 'flac', 'aac']) && !str_starts_with($realMime, 'audio/')) {
+                return back()->with('error', 'Keamanan: Spoofing terdeteksi. Magic Number file ini bukan audio asli.');
             }
         }
 
         // --- 4. KEAMANAN: TENANT ISOLATION (Private Storage) ---
+        // Nama file sudah disanitasi di atas, aman dari path traversal
         $path = $file->storeAs('private/files', $fileName);
         
         \App\Models\FileItem::create([
-            'name' => $fileName,
+            'name'      => $fileName,
             'file_path' => $path,
-            'user_id' => Auth::id(),
+            'user_id'   => Auth::id(),
             'folder_id' => $request->folder_id ?? null,
-            'mime_type' => $clientMime = $file->getClientMimeType(), 
-            'size' => $file->getSize()                 
+            'mime_type' => $file->getClientMimeType(), 
+            'size'      => $file->getSize()                 
         ]);
 
         return back()->with('success', 'File berhasil diupload.');
     }
+
 
     public function updateFolder(Request $request, $id)
     {
