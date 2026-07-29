@@ -554,13 +554,13 @@
                     <img src="{{ asset('images/telusuri.png') }}" alt="Cari" style="width: 20px; height: 20px; opacity: 0.6; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
                 </button>
                 <input type="text" name="telusuri" placeholder="Telusuri folder atau file..."
-                    value="{{ request('telusuri') }}" class="search-input" style="width: 100%; padding-left: 44px; box-sizing: border-box;">
+                    value="{{ request('telusuri') }}" class="search-input" style="width: 100%; padding-left: 44px; padding-right: 44px; box-sizing: border-box;">
+                @if (request('telusuri'))
+                    <a href="{{ url('/dashboard') }}" style="position: absolute; right: 14px; display: flex; align-items: center; justify-content: center; text-decoration: none;" title="Hapus Pencarian">
+                        <img src="{{ asset('images/close.png') }}" alt="Clear" style="width: 16px; height: 16px; opacity: 0.5; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'">
+                    </a>
+                @endif
             </div>
-            @if (request('telusuri'))
-                <a href="{{ url('/dashboard') }}" class="reset-btn">
-                    Reset
-                </a>
-            @endif
         </form>
 
         <!-- Profil User (Kanan) -->
