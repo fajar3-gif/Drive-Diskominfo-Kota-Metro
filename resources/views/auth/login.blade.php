@@ -21,8 +21,8 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            /* Background steel blue / teal gradient seperti referensi */
-            background: linear-gradient(135deg, #4a7c8a 0%, #5a8f9e 20%, #7baab5 40%, #a8c8cf 60%, #6a9aaa 80%, #4a7080 100%);
+            /* Background solid blue */
+            background: #1b5c96;
             position: relative;
             overflow: hidden;
         }
@@ -123,10 +123,10 @@
         }
 
         .input-group input:focus {
-            border-color: #4a7c8a;
+            border-color: #2563eb;
             background-color: #ffffff;
             box-shadow:
-                0 0 0 3px rgba(74, 124, 138, 0.15),
+                0 0 0 3px rgba(37, 99, 235, 0.15),
                 inset 0 1px 2px rgba(0, 0, 0, 0.02);
         }
 
@@ -137,35 +137,26 @@
             font-size: 14px;
             font-weight: 600;
             color: #ffffff;
-            background: #4a7c8a;
+            background: #2563eb;
             border: none;
-            /* Border radius kecil */
-            border-radius: 4px;
+            /* Border radius disesuaikan */
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s ease;
             letter-spacing: 0.3px;
             /* Efek timbul pada tombol */
-            box-shadow:
-                0 4px 12px rgba(74, 124, 138, 0.4),
-                0 1px 3px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            box-shadow: none;
         }
 
         .btn-login:hover {
-            background: #3d6b78;
-            box-shadow:
-                0 6px 18px rgba(74, 124, 138, 0.5),
-                0 2px 6px rgba(0, 0, 0, 0.12),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
+            background: #1e40af;
+            box-shadow: none;
         }
 
         .btn-login:active {
             transform: translateY(0);
-            background: #355e6a;
-            box-shadow:
-                0 2px 6px rgba(74, 124, 138, 0.3),
-                inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: #1e40af;
+            box-shadow: none;
         }
 
         /* Pembatas ATAU */
@@ -209,23 +200,18 @@
             text-decoration: none;
             transition: all 0.25s ease;
             /* Efek timbul ringan */
-            box-shadow:
-                0 1px 3px rgba(0, 0, 0, 0.06),
-                0 1px 2px rgba(0, 0, 0, 0.04);
+            box-shadow: none;
         }
 
         .btn-google:hover {
-            background-color: #f9fafb;
+            background-color: #f3f4f6;
             border-color: #d1d5db;
-            box-shadow:
-                0 3px 8px rgba(0, 0, 0, 0.1),
-                0 1px 3px rgba(0, 0, 0, 0.06);
-            transform: translateY(-1px);
+            box-shadow: none;
         }
 
         .btn-google:active {
             transform: translateY(0);
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+            box-shadow: none;
         }
 
         /* Google Icon SVG */
@@ -245,14 +231,14 @@
         }
 
         .register-link a {
-            color: #4a7c8a;
+            color: #2563eb;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s ease;
         }
 
         .register-link a:hover {
-            color: #3d6b78;
+            color: #1d4ed8;
             text-decoration: underline;
         }
 
@@ -291,9 +277,9 @@
                     <input type="password" name="password" placeholder="Masukkan password" required>
                 </div>
                 <div style="text-align: right; margin-bottom: 18px; margin-top: -10px;">
-                    <a href="{{ route('password.request') }}" style="font-size: 12px; color: #4a7c8a; text-decoration: none; font-weight: 500; transition: color 0.2s;"
-                       onmouseover="this.style.color='#3d6b78'; this.style.textDecoration='underline'"
-                       onmouseout="this.style.color='#4a7c8a'; this.style.textDecoration='none'">Lupa Password?</a>
+                    <a href="{{ route('password.request') }}" style="font-size: 12px; color: #2563eb; text-decoration: none; font-weight: 500; transition: color 0.2s;"
+                       onmouseover="this.style.color='#1d4ed8'; this.style.textDecoration='underline'"
+                       onmouseout="this.style.color='#2563eb'; this.style.textDecoration='none'">Lupa Password?</a>
                 </div>
                 <button type="submit" class="btn-login">Log In</button>
             </form>

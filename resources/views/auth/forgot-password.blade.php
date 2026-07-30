@@ -21,7 +21,7 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #4a7c8a 0%, #5a8f9e 20%, #7baab5 40%, #a8c8cf 60%, #6a9aaa 80%, #4a7080 100%);
+            background: #1b5c96;
             position: relative;
             overflow: hidden;
         }
@@ -134,10 +134,10 @@
         }
 
         .input-group input:focus {
-            border-color: #4a7c8a;
+            border-color: #2563eb;
             background-color: #ffffff;
             box-shadow:
-                0 0 0 3px rgba(74, 124, 138, 0.15),
+                0 0 0 3px rgba(37, 99, 235, 0.15),
                 inset 0 1px 2px rgba(0, 0, 0, 0.02);
         }
 
@@ -148,33 +148,24 @@
             font-size: 14px;
             font-weight: 600;
             color: #ffffff;
-            background: #4a7c8a;
+            background: #2563eb;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s ease;
             letter-spacing: 0.3px;
-            box-shadow:
-                0 4px 12px rgba(74, 124, 138, 0.4),
-                0 1px 3px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            box-shadow: none;
         }
 
         .btn-submit:hover {
-            background: #3d6b78;
-            box-shadow:
-                0 6px 18px rgba(74, 124, 138, 0.5),
-                0 2px 6px rgba(0, 0, 0, 0.12),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
+            background: #1e40af;
+            box-shadow: none;
         }
 
         .btn-submit:active {
             transform: translateY(0);
-            background: #355e6a;
-            box-shadow:
-                0 2px 6px rgba(74, 124, 138, 0.3),
-                inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: #1e40af;
+            box-shadow: none;
         }
 
         .back-link {
@@ -185,14 +176,14 @@
         }
 
         .back-link a {
-            color: #4a7c8a;
+            color: #2563eb;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s ease;
         }
 
         .back-link a:hover {
-            color: #3d6b78;
+            color: #1d4ed8;
             text-decoration: underline;
         }
 
@@ -229,7 +220,7 @@
                 <button type="submit" class="btn-submit">Kirim Kode Verifikasi</button>
             </form>
 
-            <p class="back-link"><a href="{{ route('login') }}">← Kembali ke Login</a></p>
+            <p class="back-link"><a href="{{ route('login') }}">Kembali ke Login</a></p>
         </div>
     </div>
 </body>

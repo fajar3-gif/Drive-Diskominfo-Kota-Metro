@@ -19,9 +19,9 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #4a7c8a 0%, #5a8f9e 20%, #7baab5 40%, #a8c8cf 60%, #6a9aaa 80%, #4a7080 100%);
+            background: #1b5c96;
             padding: 0 40px;
-            height: 68px;
+            height: 60px;
             box-sizing: border-box;
             display: flex;
             justify-content: space-between;
@@ -102,11 +102,12 @@
 
         .sidebar-btn {
             width: 100%;
-            padding: 9px 12px;
-            background-color: #4a7c8a;
+            padding: 4px 14px;
+            height: 38px;
+            background-color: #2563eb;
             color: #ffffff;
             border: none;
-            border-radius: 0;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: 600;
             font-size: 14px;
@@ -131,11 +132,12 @@
 
         .sidebar-btn-outline {
             width: 100%;
-            padding: 9px 12px;
+            padding: 4px 14px;
+            height: 38px;
             background-color: #ffffff;
-            color: #4a7c8a;
-            border: 2px solid #4a7c8a;
-            border-radius: 0;
+            color: #2563eb;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: 600;
             font-size: 14px;
@@ -169,6 +171,7 @@
             gap: 15px;
             padding: 10px 14px;
             border-radius: 0;
+            border-left: 4px solid transparent;
             color: #475569;
             text-decoration: none;
             font-weight: 500;
@@ -178,12 +181,13 @@
 
         .sidebar-menu-item:hover,
         .sidebar-menu-item.active {
-            background-color: rgba(0, 0, 0, 0.10);
-            color: #0f172a;
+            background-color: #eef2ff;
+            color: #2563eb;
         }
         
         .sidebar-menu-item.active {
             font-weight: 600;
+            border-left-color: #2563eb;
         }
 
         .sidebar-menu-item img {
@@ -196,7 +200,8 @@
 
         .sidebar-menu-item:hover img,
         .sidebar-menu-item.active img {
-            opacity: 0.9;
+            opacity: 1;
+            filter: invert(34%) sepia(87%) saturate(3020%) hue-rotate(217deg) brightness(96%) contrast(98%);
         }
 
         .sidebar-link {
@@ -228,9 +233,10 @@
         .search-input {
             width: 500px;
             max-width: 100%;
-            padding: 10px 20px;
+            padding: 4px 14px;
+            height: 32px;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             font-family: inherit;
             font-size: 15px;
             background: white;
@@ -493,8 +499,8 @@
         }
 
         .folder-popup-input:focus {
-            border-color: #4a7c8a;
-            box-shadow: 0 0 0 3px rgba(74, 124, 138, 0.1);
+            border-color: #1b5c96;
+            box-shadow: 0 0 0 3px rgba(27, 92, 150, 0.1);
         }
 
         .folder-popup-actions {
@@ -523,7 +529,7 @@
         .folder-popup-submit {
             padding: 7px 14px;
             border: none;
-            background: #4a7c8a;
+            background: #1b5c96;
             border-radius: 0;
             cursor: pointer;
             font-family: inherit;
@@ -534,7 +540,7 @@
         }
 
         .folder-popup-submit:hover {
-            background: #3d6b78;
+            background: #154877;
         }
     </style>
 </head>
@@ -565,11 +571,11 @@
 
         <!-- Profil User (Kanan) -->
         <div class="dropdown profile-dropdown" style="position: relative;">
-            <button onclick="toggleDropdown('profile-menu')" class="dropbtn" style="padding: 0; border-radius: 50%; outline: none;">
+            <button onclick="toggleDropdown('profile-menu')" class="dropbtn" style="padding: 0; border-radius: 50%; outline: none; display: flex; align-items: center; justify-content: center;">
                 @if(Auth::user()->avatar)
-                    <img src="{{ Auth::user()->avatar }}" alt="Profile" referrerpolicy="no-referrer" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <img src="{{ Auth::user()->avatar }}" alt="Profile" referrerpolicy="no-referrer" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 @else
-                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=4a7c8a&color=fff" alt="Profile" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=1b5c96&color=fff" alt="Profile" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 @endif
             </button>
             
@@ -580,9 +586,9 @@
                 </p>
                 <div style="margin-bottom: 24px;">
                     @if(Auth::user()->avatar)
-                        <img src="{{ Auth::user()->avatar }}" alt="Profile" referrerpolicy="no-referrer" style="width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <img src="{{ Auth::user()->avatar }}" alt="Profile" referrerpolicy="no-referrer" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                     @else
-                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=4a7c8a&color=fff" alt="Profile" style="width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=1b5c96&color=fff" alt="Profile" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                     @endif
                 </div>
             
@@ -610,6 +616,7 @@
                         <p class="folder-popup-title">Buat Folder Baru</p>
                         <form action="{{ url('/folder/create') }}" method="POST">
                             @csrf
+                            <input type="hidden" name="parent_id" value="{{ $folder->id }}">
                             <input type="text" name="name" class="folder-popup-input" id="folderNameInput" placeholder="Nama folder" autocomplete="off" required>
                             <div class="folder-popup-actions">
                                 <button type="button" class="folder-popup-cancel" onclick="closeFolderPopup()">Batal</button>
@@ -624,6 +631,7 @@
 
                 <form action="{{ url('/file/upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm" style="margin: 0;">
                     @csrf
+                    <input type="hidden" name="folder_id" value="{{ $folder->id }}">
                     <input type="file" name="file" id="fileInput" style="display: none;" required onchange="document.getElementById('uploadForm').submit();">
                     <button type="button" class="sidebar-btn-outline" onclick="document.getElementById('fileInput').click();">
                         <img src="{{ asset('images/upload-file.png') }}" alt="Upload File" style="width: 20px; height: 20px; object-fit: contain; filter: invert(47%) sepia(15%) saturate(841%) hue-rotate(149deg) brightness(92%) contrast(87%);">
@@ -768,11 +776,22 @@
                         <a href="{{ url()->current() }}?type={{ request('type') }}&modified=30days" style="{{ request('modified') == '30days' ? 'background-color: #f1f5f9; font-weight: 500;' : '' }}">30 hari terakhir</a>
                     </div>
                 </div>
+
+                <!-- VIEW TOGGLES -->
+                <div style="margin-left: auto; display: flex; align-items: center; background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; overflow: hidden; height: 32px;">
+                    <button onclick="toggleViewMode('list')" id="btn-view-list" style="background: #e2e8f0; border: none; padding: 0 10px; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #1b5c96;" title="Tampilan Daftar">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                    </button>
+                    <div style="width: 1px; height: 100%; background: #cbd5e1;"></div>
+                    <button onclick="toggleViewMode('grid')" id="btn-view-grid" style="background: transparent; border: none; padding: 0 10px; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b;" title="Tampilan Petak">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    </button>
+                </div>
             </div>
 
         <!-- SELECTION BAR -->
-        <div id="selection-bar" style="position: absolute; top: 0; left: 0; width: 100%; height: 32px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 14px; background: #e8f0fe; border: 1px solid #d2e3fc; border-radius: 8px; z-index: 10; transition: opacity 0.2s ease, visibility 0.2s ease; opacity: 0; visibility: hidden;">
-            <button onclick="clearSelection()" style="background:none;border:none;cursor:pointer;font-size:15px;color:#3c4043;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" title="Batalkan pilihan" onmouseover="this.style.background='rgba(60,64,67,0.08)'" onmouseout="this.style.background='none'">&#x2715;</button>
+        <div id="selection-bar" style="position: absolute; top: 0; left: 0; width: 100%; height: 32px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 14px; background: #e8f0fe; border: 1px solid #d2e3fc; border-radius: 4px; z-index: 10; transition: opacity 0.2s ease, visibility 0.2s ease; opacity: 0; visibility: hidden;">
+            <button onclick="clearSelection()" style="background:none;border:none;cursor:pointer;width:28px;height:28px;border-radius:4px;display:flex;align-items:center;justify-content:center;" title="Batalkan pilihan" onmouseover="this.style.background='rgba(60,64,67,0.10)'" onmouseout="this.style.background='none'"><img src="{{ asset('images/close.png') }}" style="width:14px;height:14px;opacity:0.65;"></button>
             <span id="selected-count" style="font-weight:500;color:#3c4043;font-size:14px;margin-right:8px;">0 dipilih</span>
             <div style="width:1px;height:16px;background:#dadce0;margin-right:8px;"></div>
             <button onclick="bulkAction('download')" title="Download" style="background:none;border:none;cursor:pointer;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='rgba(60,64,67,0.08)'" onmouseout="this.style.background='none'">
