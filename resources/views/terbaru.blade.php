@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -181,7 +181,7 @@
 
         .sidebar-menu-item:hover,
         .sidebar-menu-item.active {
-            background-color: #eef2ff;
+            background-color: #e0e7ff;
             color: #2563eb;
         }
         
@@ -319,6 +319,68 @@
             gap: 0;
         }
 
+        /* === GRID VIEW MODE === */
+        .grid.view-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            padding: 4px 0;
+        }
+        .grid.view-grid .item-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 16px 10px 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            gap: 8px;
+            min-height: 100px;
+            position: relative;
+            cursor: pointer;
+        }
+        .grid.view-grid .item-card .file-name {
+            flex-direction: column;
+            gap: 6px;
+            text-align: center;
+            width: 100%;
+        }
+        .grid.view-grid .item-card .file-name img {
+            width: 40px !important;
+            height: 40px !important;
+            margin-right: 0 !important;
+        }
+        .grid.view-grid .item-card .file-name span:last-child {
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+        .grid.view-grid .item-card .item-details {
+            display: none;
+        }
+        .grid.view-grid .item-card .dropdown {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            justify-content: center;
+        }
+        .grid.view-grid .item-card .select-checkbox {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            opacity: 0;
+        }
+        .grid.view-grid .item-card:hover .select-checkbox,
+        .grid.view-grid .item-card.selected .select-checkbox {
+            opacity: 1;
+        }
+        .list-header.hidden-header {
+            display: none;
+        }
+
         .file-name {
             min-width: 0;
             overflow: hidden;
@@ -389,7 +451,9 @@
 
         .dropdown {
             position: relative;
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
             text-align: right;
         }
 
@@ -402,6 +466,11 @@
             padding: 0 8px;
             color: #64748b;
             transition: color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 28px;
+            line-height: 1;
         }
         
         .dropbtn:hover {
@@ -708,7 +777,9 @@
             @endif
 
             <!-- JUDUL HALAMAN UTAMA -->
-            <h2 style="font-size: 21px; font-weight: 600; color: #374151; margin-top: 0; margin-bottom: 12px; letter-spacing: -0.3px;">Terbaru</h2>
+            <div style="display: flex; align-items: center; gap: 0; margin-bottom: 14px; overflow: hidden; white-space: nowrap; min-height: 32px;">
+                <span style="flex-shrink: 0; font-size: 20px; font-weight: 600; color: #202124; padding: 4px 6px;">Terbaru</span>
+            </div>
 
             <!-- TOOLBAR WRAPPER -->
             <div style="position: relative; min-height: 36px; margin-bottom: 12px; display: flex; align-items: center; width: 100%;">
@@ -881,6 +952,32 @@
     </div>
 
     <script>
+        // === VIEW MODE TOGGLE ===
+        function toggleViewMode(mode) {
+            var gridEl = document.querySelector('.grid');
+            var headerEl = document.querySelector('.list-header');
+            var btnList = document.getElementById('btn-view-list');
+            var btnGrid = document.getElementById('btn-view-grid');
+            if (!gridEl) return;
+            if (mode === 'grid') {
+                gridEl.classList.add('view-grid');
+                if (headerEl) headerEl.classList.add('hidden-header');
+                if (btnGrid) { btnGrid.style.background = '#e2e8f0'; btnGrid.style.color = '#1b5c96'; }
+                if (btnList) { btnList.style.background = 'transparent'; btnList.style.color = '#64748b'; }
+                localStorage.setItem('driveViewMode', 'grid');
+            } else {
+                gridEl.classList.remove('view-grid');
+                if (headerEl) headerEl.classList.remove('hidden-header');
+                if (btnList) { btnList.style.background = '#e2e8f0'; btnList.style.color = '#1b5c96'; }
+                if (btnGrid) { btnGrid.style.background = 'transparent'; btnGrid.style.color = '#64748b'; }
+                localStorage.setItem('driveViewMode', 'list');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            var saved = localStorage.getItem('driveViewMode');
+            if (saved === 'grid') toggleViewMode('grid');
+        });
+
         // Popup Tambah Folder
         function toggleFolderPopup() {
             var popup = document.getElementById('folderPopup');
