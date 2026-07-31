@@ -191,7 +191,21 @@
                                 <img src="{{ asset('images/ikon-folder.png') }}" class="item-icon" alt="Folder" style="opacity: 0.8;">
                                 <a href="{{ url('/files/' . $file->id . '?path=' . urlencode($item['full_path'])) }}" style="text-decoration: none; color: #1a73e8; font-weight: 500;">{{ $item['name'] }}</a>
                             @else
-                                <span style="font-size: 18px; margin-right: 4px; color: #5f6368;">📄</span>
+                                @if(strtolower(pathinfo($item['name'], PATHINFO_EXTENSION)) === 'pdf')
+                                    <img src="{{ asset('images/pdf.png') }}" alt="PDF" style="width: 20px; height: 20px; object-fit: contain; margin-right: 4px;">
+                                @elseif(in_array(strtolower(pathinfo($item['name'], PATHINFO_EXTENSION)), ['doc', 'docx']))
+                                    <img src="{{ asset('images/doc.png') }}" alt="Word" style="width: 20px; height: 20px; object-fit: contain; margin-right: 4px;">
+                                @elseif(strtolower(pathinfo($item['name'], PATHINFO_EXTENSION)) === 'zip')
+                                    <img src="{{ asset('images/zip.png') }}" alt="ZIP" style="width: 20px; height: 20px; object-fit: contain; margin-right: 4px;">
+                                @elseif(in_array(strtolower(pathinfo($item['name'], PATHINFO_EXTENSION)), ['mp4', 'mkv', 'avi']))
+                                    <img src="{{ asset('images/video.png') }}" alt="Video" style="width: 20px; height: 20px; object-fit: contain; margin-right: 4px;">
+                                @elseif(in_array(strtolower(pathinfo($item['name'], PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg']))
+                                    <img src="{{ asset('images/image.png') }}" alt="Image" style="width: 20px; height: 20px; object-fit: contain; margin-right: 4px;">
+                                @elseif(in_array(strtolower(pathinfo($item['name'], PATHINFO_EXTENSION)), ['ppt', 'pptx']))
+                                    <img src="{{ asset('images/ppt.png') }}" alt="PPT" style="width: 20px; height: 20px; object-fit: contain; margin-right: 4px;">
+                                @else
+                                    <img src="{{ asset('images/file.png') }}" alt="File" style="width: 20px; height: 20px; object-fit: contain; margin-right: 4px;">
+                                @endif
                                 <span>{{ $item['name'] }}</span>
                             @endif
                         </div>

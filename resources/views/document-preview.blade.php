@@ -119,7 +119,21 @@
 
     <div class="header">
         <div class="header-title">
-            <span style="font-size: 20px;">📄</span>
+            @if(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)) === 'pdf')
+                <img src="{{ asset('images/pdf.png') }}" alt="PDF" style="width: 24px; height: 24px; object-fit: contain;">
+            @elseif(in_array(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)), ['doc', 'docx']))
+                <img src="{{ asset('images/doc.png') }}" alt="Word" style="width: 24px; height: 24px; object-fit: contain;">
+            @elseif(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)) === 'zip')
+                <img src="{{ asset('images/zip.png') }}" alt="ZIP" style="width: 24px; height: 24px; object-fit: contain;">
+            @elseif(in_array(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)), ['mp4', 'mkv', 'avi']))
+                <img src="{{ asset('images/video.png') }}" alt="Video" style="width: 24px; height: 24px; object-fit: contain;">
+            @elseif(in_array(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg']))
+                <img src="{{ asset('images/image.png') }}" alt="Image" style="width: 24px; height: 24px; object-fit: contain;">
+            @elseif(in_array(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)), ['ppt', 'pptx']))
+                <img src="{{ asset('images/ppt.png') }}" alt="PPT" style="width: 24px; height: 24px; object-fit: contain;">
+            @else
+                <img src="{{ asset('images/file.png') }}" alt="File" style="width: 24px; height: 24px; object-fit: contain;">
+            @endif
             <span>{{ $file->name }}</span>
         </div>
         <a href="{{ url('/files/' . $file->id . '/download') }}" class="btn-download">
