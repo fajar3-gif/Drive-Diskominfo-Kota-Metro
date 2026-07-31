@@ -118,16 +118,10 @@
             justify-content: center;
             gap: 8px;
         }
-
         .sidebar-btn:hover,
         .sidebar-btn.active {
-            background-color: rgba(0, 0, 0, 0.10);
-            color: #0f172a;
-        }
-
-        .sidebar-btn:hover img,
-        .sidebar-btn.active img {
-            filter: brightness(0) invert(0) opacity(0.8) !important;
+            background-color: #1e40af;
+            color: #ffffff;
         }
 
         .sidebar-btn-outline {
@@ -150,18 +144,15 @@
         }
         
         .sidebar-btn-outline:hover {
-            background-color: rgba(0, 0, 0, 0.10);
-            color: #0f172a;
-        }
-
-        .sidebar-btn-outline:hover img {
-            filter: brightness(0) invert(0) opacity(0.8) !important;
+            background-color: #f3f4f6;
+            color: #1d4ed8;
+            border-color: #cbd5e1;
         }
 
         .sidebar-menu {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 8px;
             margin-top: 10px;
         }
 
@@ -749,11 +740,12 @@
                 }
             @endphp
             <div style="margin-top: auto; padding: 20px 5px 0 5px;">
+                <div style="font-size: 14px; color: #1e293b; font-weight: 600; margin-bottom: 4px;">Penyimpanan</div>
+                <div style="font-size: 13px; color: #475569; font-weight: 500; margin-bottom: 8px;">
+                    {{ $usedText }} dari 1 GB terpakai
+                </div>
                 <div style="width: 100%; background-color: #cbd5e1; height: 6px; border-radius: 4px; overflow: hidden; margin-bottom: 8px;">
                     <div style="width: {{ $percentage }}%; background-color: #1a73e8; height: 100%; border-radius: 4px; transition: width 0.3s ease;"></div>
-                </div>
-                <div style="font-size: 13px; color: #475569; font-weight: 500;">
-                    {{ $usedText }} dari 1 GB terpakai
                 </div>
             </div>
         </div>
@@ -849,9 +841,12 @@
 
         <!-- HEADER DAFTAR (GRID KOLOM) -->
         <div class="list-header">
-            <div style="cursor: pointer; display: flex; align-items: center;" onclick="window.location.href='?order={{ (isset($order) && $order === 'desc') ? 'asc' : 'desc' }}'" title="Urutkan {{ (isset($order) && $order === 'desc') ? 'A-Z' : 'Z-A' }}">
-                <span style="margin-right: 8px;">{{ (isset($order) && $order === 'desc') ? '↓' : '↑' }}</span>
-                <span>Nama</span>
+            <div style="display: flex; align-items: center;">
+                <span class="select-checkbox" id="selectAllBtn" style="opacity: 1; margin-right: 12px;" onclick="event.stopPropagation(); toggleSelectAll()" title="Pilih Semua">✓</span>
+                <div style="cursor: pointer; display: flex; align-items: center;" onclick="window.location.href='?order={{ (isset($order) && $order === 'desc') ? 'asc' : 'desc' }}'" title="Urutkan {{ (isset($order) && $order === 'desc') ? 'A-Z' : 'Z-A' }}">
+                    <span style="display: inline-block; width: 24px; text-align: center; margin-right: 8px;">{{ (isset($order) && $order === 'desc') ? '↓' : '↑' }}</span>
+                    <span>Nama</span>
+                </div>
             </div>
             
             <div>Tanggal dihapus</div>
@@ -1091,10 +1086,22 @@
             var cs = _cards(), s = Math.min(a,b), e = Math.max(a,b);
             for (var i = s; i <= e; i++) _selectCard(cs[i]);
         }
+        function toggleSelectAll() {
+            var cs = _cards();
+            if (cs.length === 0) return;
+            if (_sel.size === cs.length) {
+                clearSelection();
+            } else {
+                cs.forEach(function(el) { _selectCard(el); });
+                _lastIdx = cs.length - 1;
+                _updateBar();
+            }
+        }
         function _updateBar() {
             var bar = document.getElementById('selection-bar');
             var filterBar = document.getElementById('filter-bar');
             var cnt = document.getElementById('selected-count');
+            var saBtn = document.getElementById('selectAllBtn');
             if (_sel.size > 0) {
                 bar.style.opacity = '1';
                 bar.style.visibility = 'visible';
@@ -1103,12 +1110,28 @@
                     filterBar.style.visibility = 'hidden';
                 }
                 cnt.textContent = _sel.size + ' dipilih';
+                if (saBtn) {
+                    if (_sel.size === _cards().length) {
+                        saBtn.style.background = '#1a73e8';
+                        saBtn.style.borderColor = '#1a73e8';
+                        saBtn.style.color = 'white';
+                    } else {
+                        saBtn.style.background = 'white';
+                        saBtn.style.borderColor = '#bcc0c4';
+                        saBtn.style.color = 'white';
+                    }
+                }
             } else {
                 bar.style.opacity = '0';
                 bar.style.visibility = 'hidden';
                 if(filterBar) {
                     filterBar.style.opacity = '1';
                     filterBar.style.visibility = 'visible';
+                }
+                if (saBtn) {
+                    saBtn.style.background = 'white';
+                    saBtn.style.borderColor = '#bcc0c4';
+                    saBtn.style.color = 'white';
                 }
             }
         }
@@ -1173,8 +1196,15 @@
                     var cs = _cards(); if (!cs.length) return;
                     var ni = _lastIdx === -1 ? (e.key==='ArrowDown'?0:cs.length-1)
                            : (e.key==='ArrowDown' ? Math.min(_lastIdx+1,cs.length-1) : Math.max(_lastIdx-1,0));
-                    _selectCard(cs[ni]); _lastIdx = ni; _updateBar();
-                    cs[ni].scrollIntoView({block:'nearest', behavior:'smooth'});
+                    if (ni !== _lastIdx) {
+                        if (_sel.has(_key(cs[ni]))) {
+                            _deselectCard(cs[_lastIdx]);
+                        } else {
+                            _selectCard(cs[ni]);
+                        }
+                        _lastIdx = ni; _updateBar();
+                        cs[ni].scrollIntoView({block:'nearest', behavior:'smooth'});
+                    }
                 }
                 if (e.key === 'Escape') clearSelection();
             });
