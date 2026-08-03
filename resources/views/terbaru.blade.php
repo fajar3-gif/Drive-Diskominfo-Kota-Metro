@@ -609,7 +609,7 @@
 
     <div class="header">
         <div style="display: flex; align-items: center; gap: 12px; width: 220px;">
-            <img src="{{ asset('images/kominfo.png') }}" alt="Logo Kominfo" style="width: 40px; height: 40px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));">
+            <img src="{{ asset('images/nih.png') }}" alt="Logo Kominfo" style="width: 50px; height: 50px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); flex-shrink: 0;">
             <h2 class="logo-title" style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: 0.5px;">KOMSAFE</h2>
         </div>
 
