@@ -224,8 +224,8 @@
         .search-input {
             width: 500px;
             max-width: 100%;
-            padding: 4px 14px;
-            height: 32px;
+            padding: 8px 14px;
+            height: 38px;
             border: none;
             border-radius: 4px;
             font-family: inherit;
