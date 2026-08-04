@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -150,54 +150,80 @@ class AuthController extends Controller
         return redirect()->route('login')->with('status', 'Password berhasil direset! Silakan login dengan password baru Anda.');
     }
 
-    // --- FITUR LOGIN GOOGLE ---
+    // --- FITUR LOGIN GOOGLE VIA FIREBASE AUTH ---
 
-    // Mengarahkan pengguna ke halaman login Google
-    public function redirectToGoogle()
+    // Menerima idToken dari Firebase JS SDK, memverifikasinya ke Firebase REST API,
+    // lalu membuat sesi login Laravel untuk user yang bersangkutan.
+    public function handleFirebaseLogin(Request $request)
     {
-        // Tambahkan prompt => select_account agar Google selalu memunculkan pilihan email
-        return Socialite::driver('google')->with(['prompt' => 'select_account'])->redirect();
-    }
+        $request->validate([
+            'idToken' => 'required|string',
+        ]);
 
-    // Menangani kembalian data dari Google setelah user berhasil login
-    public function handleGoogleCallback()
-    {
         try {
-            // Ambil data user dari Google
-            $googleUser = Socialite::driver('google')->user();
-            
-            // Cek apakah email pengguna sudah ada di database kita
-            $user = User::where('email', $googleUser->email)->first();
+            // Firebase Web API Key (public key, aman dipakai di server)
+            $firebaseApiKey = 'AIzaSyDPhmpfpI6okjVtiPf7hQlbWeKbJV4W8UA';
+
+            // Verifikasi idToken ke Firebase Identity Toolkit REST API
+            $response = Http::post(
+                "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key={$firebaseApiKey}",
+                ['idToken' => $request->idToken]
+            );
+
+            if ($response->failed() || empty($response->json('users'))) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Token Firebase tidak valid. Silakan coba login lagi.',
+                ], 401);
+            }
+
+            $firebaseUser = $response->json('users')[0];
+            $email        = $firebaseUser['email'] ?? null;
+            $name         = $firebaseUser['displayName'] ?? ($email ? explode('@', $email)[0] : 'User');
+            $avatar       = $firebaseUser['photoUrl'] ?? null;
+            $firebaseUid  = $firebaseUser['localId']; // Firebase unique user ID
+
+            if (!$email) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Akun Google Anda tidak memiliki email. Silakan gunakan akun lain.',
+                ], 422);
+            }
+
+            // Cari atau buat user di database Laravel
+            $user = User::where('email', $email)->first();
 
             if ($user) {
-                // Jika sudah ada, update google_id dan foto profilnya (avatar)
+                // Update data Google terbaru
                 $user->update([
-                    'google_id' => $googleUser->id,
-                    'avatar' => $googleUser->avatar, // Ini menyimpan link foto Google
+                    'google_id' => $firebaseUid,
+                    'avatar'    => $avatar,
                 ]);
             } else {
-                // Jika belum ada, daftarkan sebagai user baru otomatis
+                // Daftarkan user baru otomatis
                 $user = User::create([
-                    'name' => $googleUser->name,
-                    'email' => $googleUser->email,
-                    'google_id' => $googleUser->id,
-                    'avatar' => $googleUser->avatar, // Ini menyimpan link foto Google
-                    'password' => Hash::make(Str::random(24)) // Buat password acak karena login pakai Google
+                    'name'      => $name,
+                    'email'     => $email,
+                    'google_id' => $firebaseUid,
+                    'avatar'    => $avatar,
+                    'password'  => Hash::make(Str::random(24)),
                 ]);
             }
 
             // Login-kan user ke sistem Laravel
             Auth::login($user);
+            $request->session()->regenerate();
 
-            // Arahkan ke halaman utama/dashboard setelah sukses
-            return redirect('/dashboard'); 
+            return response()->json([
+                'success'  => true,
+                'redirect' => '/dashboard',
+            ]);
 
         } catch (\Exception $e) {
-            // Hapus atau beri komentar pada baris dd() tadi
-            // dd('Error dari sistem: ' . $e->getMessage());
-            
-            // Kembalikan baris redirect ini
-            return redirect('/login')->withErrors(['email' => 'Gagal login dengan Google. Silakan coba lagi.']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan server. Silakan coba lagi.',
+            ], 500);
         }
     }
 }

@@ -20,9 +20,8 @@ Route::middleware('guest')->group(function () {
     Route::get('/reset-password', [AuthController::class, 'showResetForm'])->name('password.reset');
     Route::post('/reset-password', [AuthController::class, 'updatePassword'])->name('password.update');
 
-    // --- ROUTE LOGIN GOOGLE ---
-    Route::get('/auth/google', [AuthController::class, 'redirectToGoogle']);
-    Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+    // --- ROUTE LOGIN GOOGLE VIA FIREBASE ---
+    Route::post('/auth/firebase', [AuthController::class, 'handleFirebaseLogin']);
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/folder/create', [DriveController::class, 'storeFolder']);
