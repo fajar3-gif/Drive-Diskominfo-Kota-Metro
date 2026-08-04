@@ -2,7 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DriveController;
+use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\SocialAuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FolderController;
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\FileTrashController;
+use App\Http\Controllers\TrashController;
+use App\Http\Controllers\BulkActionController;
 
 Route::get('/', function () {
     return redirect('/login');
@@ -14,42 +21,49 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'storeRegister']);
 });
+
     // --- ROUTE LUPA PASSWORD & RESET PASSWORD ---
-    Route::get('/lupa-password', [AuthController::class, 'showForgotForm'])->name('password.request');
-    Route::post('/lupa-password', [AuthController::class, 'sendResetCode'])->name('password.email');
-    Route::get('/reset-password', [AuthController::class, 'showResetForm'])->name('password.reset');
-    Route::post('/reset-password', [AuthController::class, 'updatePassword'])->name('password.update');
+    Route::get('/lupa-password', [PasswordResetController::class, 'showForgotForm'])->name('password.request');
+    Route::post('/lupa-password', [PasswordResetController::class, 'sendResetCode'])->name('password.email');
+    Route::get('/reset-password', [PasswordResetController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [PasswordResetController::class, 'updatePassword'])->name('password.update');
 
     // --- ROUTE LOGIN GOOGLE VIA FIREBASE ---
-    Route::post('/auth/firebase', [AuthController::class, 'handleFirebaseLogin']);
+    Route::post('/auth/firebase', [SocialAuthController::class, 'handleFirebaseLogin']);
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::post('/folder/create', [DriveController::class, 'storeFolder']);
-    Route::post('/file/upload', [\App\Http\Controllers\DriveController::class, 'storeFile']);
-    Route::post('/folder/{id}/update', [\App\Http\Controllers\DriveController::class, 'updateFolder']);
-    Route::post('/folder/{id}/delete', [\App\Http\Controllers\DriveController::class, 'deleteFolder']);
-    Route::post('/file/{id}/delete', [\App\Http\Controllers\DriveController::class, 'deleteFile']);
-    Route::get('/files/{id}', [DriveController::class, 'showFile']);
-    Route::get('/files/{id}/download', [DriveController::class, 'downloadFile']);
-    Route::get('/folder/show/{id}', [DriveController::class, 'showFolder']);
-    Route::get('/dashboard', [DriveController::class, 'index'])->name('dashboard');
-    Route::get('/terbaru', [DriveController::class, 'terbaru'])->name('terbaru');
+    
+    // --- DASHBOARD & FAVORIT ---
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/terbaru', [DashboardController::class, 'terbaru'])->name('terbaru');
+    Route::get('/favorit', [DashboardController::class, 'favorit'])->name('favorit');
+    
+    // --- FOLDER ACTIONS ---
+    Route::post('/folder/create', [FolderController::class, 'storeFolder']);
+    Route::post('/folder/{id}/update', [FolderController::class, 'updateFolder']);
+    Route::get('/folder/show/{id}', [FolderController::class, 'showFolder']);
+    Route::post('/folder/{id}/delete', [FolderController::class, 'deleteFolder']);
+    Route::post('/folder/{id}/favorite', [FolderController::class, 'toggleFavoriteFolder']);
+    
+    // --- FILE ACTIONS ---
+    Route::post('/file/upload', [FileController::class, 'storeFile']);
+    Route::get('/files/{id}', [FileController::class, 'showFile']);
+    Route::get('/files/{id}/download', [FileController::class, 'downloadFile']);
+    Route::post('/file/{id}/delete', [FileTrashController::class, 'deleteFile']);
+    Route::post('/file/{id}/favorite', [FileController::class, 'toggleFavoriteFile']);
 
-    Route::get('/sampah', [DriveController::class, 'sampah'])->name('sampah');
-    Route::post('/sampah/folder/{id}/restore', [DriveController::class, 'restoreFolder']);
-    Route::post('/sampah/file/{id}/restore', [DriveController::class, 'restoreFile']);
-    Route::post('/sampah/folder/{id}/force-delete', [DriveController::class, 'forceDeleteFolder']);
-    Route::post('/sampah/file/{id}/force-delete', [DriveController::class, 'forceDeleteFile']);
-
-    Route::get('/favorit', [DriveController::class, 'favorit'])->name('favorit');
-    Route::post('/folder/{id}/favorite', [DriveController::class, 'toggleFavoriteFolder']);
-    Route::post('/file/{id}/favorite', [DriveController::class, 'toggleFavoriteFile']);
+    // --- SAMPAH ---
+    Route::get('/sampah', [TrashController::class, 'sampah'])->name('sampah');
+    Route::post('/sampah/folder/{id}/restore', [FolderController::class, 'restoreFolder']);
+    Route::post('/sampah/file/{id}/restore', [FileTrashController::class, 'restoreFile']);
+    Route::post('/sampah/folder/{id}/force-delete', [FolderController::class, 'forceDeleteFolder']);
+    Route::post('/sampah/file/{id}/force-delete', [FileTrashController::class, 'forceDeleteFile']);
 
     // --- BULK ACTIONS ---
-    Route::post('/bulk/trash', [DriveController::class, 'bulkTrash']);
-    Route::post('/bulk/restore', [DriveController::class, 'bulkRestore']);
-    Route::post('/bulk/force-delete', [DriveController::class, 'bulkForceDelete']);
-    Route::post('/bulk/favorite', [DriveController::class, 'bulkFavorite']);
-    Route::post('/bulk/download', [DriveController::class, 'bulkDownload']);
+    Route::post('/bulk/trash', [BulkActionController::class, 'bulkTrash']);
+    Route::post('/bulk/restore', [BulkActionController::class, 'bulkRestore']);
+    Route::post('/bulk/force-delete', [BulkActionController::class, 'bulkForceDelete']);
+    Route::post('/bulk/favorite', [BulkActionController::class, 'bulkFavorite']);
+    Route::post('/bulk/download', [BulkActionController::class, 'bulkDownload']);
 });
 
