@@ -60,7 +60,7 @@
                             @csrf
                             <button type="submit">Pulihkan</button>
                         </form>
-                        <form action="{{ url('/sampah/folder/'.$folder->id.'/force-delete') }}" method="POST" style="margin: 0;">
+                        <form action="{{ url('/sampah/folder/'.$folder->id.'/force-delete') }}" method="POST" style="margin: 0;" onsubmit="event.preventDefault(); var f = this; showForceDeleteConfirm(function(){ f.submit(); });">
                             @csrf
                             <button type="submit" style="color: red;">Hapus Permanen</button>
                         </form>
@@ -159,7 +159,7 @@
                             @csrf
                             <button type="submit">Pulihkan</button>
                         </form>
-                        <form action="{{ url('/sampah/file/'.$file->id.'/force-delete') }}" method="POST" style="margin: 0;">
+                        <form action="{{ url('/sampah/file/'.$file->id.'/force-delete') }}" method="POST" style="margin: 0;" onsubmit="event.preventDefault(); var f = this; showForceDeleteConfirm(function(){ f.submit(); });">
                             @csrf
                             <button type="submit" style="color: red;">Hapus Permanen</button>
                         </form>

@@ -148,19 +148,39 @@
         }
     }
 
+    var _forceDeleteCallback = null;
+
+    function showForceDeleteConfirm(callback) {
+        _forceDeleteCallback = callback;
+        document.getElementById('forceDeleteModal').style.display = 'flex';
+    }
+
+    function closeForceDeleteModal() {
+        document.getElementById('forceDeleteModal').style.display = 'none';
+        _forceDeleteCallback = null;
+    }
+
     function bulkAction(action) {
         if (_sel.size === 0) return;
-        if (action === 'force-delete' && !confirm('Hapus permanen ' + _sel.size + ' item? Tidak dapat dibatalkan!')) return;
-        var folderIds = [], fileIds = [];
-        _sel.forEach(function(v){ if(v.type==='folder') folderIds.push(v.id); else fileIds.push(v.id); });
-        var form = document.createElement('form');
-        form.method = 'POST'; form.action = '/bulk/' + action; form.style.display = 'none';
-        var t = document.createElement('input'); t.type='hidden'; t.name='_token';
-        t.value = document.querySelector('meta[name="csrf-token"]').content;
-        form.appendChild(t);
-        folderIds.forEach(function(id){ var i=document.createElement('input'); i.type='hidden'; i.name='folder_ids[]'; i.value=id; form.appendChild(i); });
-        fileIds.forEach(function(id){ var i=document.createElement('input'); i.type='hidden'; i.name='file_ids[]'; i.value=id; form.appendChild(i); });
-        document.body.appendChild(form); form.submit();
+        
+        var executeBulk = function() {
+            var folderIds = [], fileIds = [];
+            _sel.forEach(function(v){ if(v.type==='folder') folderIds.push(v.id); else fileIds.push(v.id); });
+            var form = document.createElement('form');
+            form.method = 'POST'; form.action = '/bulk/' + action; form.style.display = 'none';
+            var t = document.createElement('input'); t.type='hidden'; t.name='_token';
+            t.value = document.querySelector('meta[name="csrf-token"]').content;
+            form.appendChild(t);
+            folderIds.forEach(function(id){ var i=document.createElement('input'); i.type='hidden'; i.name='folder_ids[]'; i.value=id; form.appendChild(i); });
+            fileIds.forEach(function(id){ var i=document.createElement('input'); i.type='hidden'; i.name='file_ids[]'; i.value=id; form.appendChild(i); });
+            document.body.appendChild(form); form.submit();
+        };
+
+        if (action === 'force-delete') {
+            showForceDeleteConfirm(executeBulk);
+        } else {
+            executeBulk();
+        }
     }
 
     // Init selection on load
@@ -240,3 +260,15 @@
         });
     });
 </script>
+
+<!-- MODAL KONFIRMASI HAPUS PERMANEN -->
+<div id="forceDeleteModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:white; padding:24px; border-radius:8px; width:100%; max-width:400px; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+        <h3 style="margin:0 0 12px 0; font-size:18px; color:#202124;">Hapus permanen?</h3>
+        <p style="margin:0 0 24px 0; font-size:14px; color:#5f6368;">Tindakan ini tidak dapat diurungkan.</p>
+        <div style="display:flex; justify-content:flex-end; gap:12px;">
+            <button onclick="closeForceDeleteModal()" style="background:white; border:1px solid #dadce0; padding:8px 16px; border-radius:4px; color:#1a73e8; cursor:pointer; font-weight:500; font-size:14px;">Batal</button>
+            <button id="btnConfirmForceDelete" style="background:#d93025; border:none; padding:8px 16px; border-radius:4px; color:white; cursor:pointer; font-weight:500; font-size:14px;" onclick="if(_forceDeleteCallback) _forceDeleteCallback(); closeForceDeleteModal();">Hapus Permanen</button>
+        </div>
+    </div>
+</div>

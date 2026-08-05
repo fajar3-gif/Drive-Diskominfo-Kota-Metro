@@ -56,11 +56,20 @@
         </button>
         <span id="selected-count" style="font-weight:500;color:#3c4043;font-size:14px;margin-right:8px;">0 dipilih</span>
         <div style="width:1px;height:16px;background:#dadce0;margin-right:8px;"></div>
-        <button onclick="bulkAction('download')" title="Download" style="background:none;border:none;cursor:pointer;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='rgba(60,64,67,0.08)'" onmouseout="this.style.background='none'">
-            <img src="{{ asset('images/download.png') }}" style="width: 16px; height: 16px; opacity: 0.7;">
-        </button>
-        <button onclick="bulkAction('trash')" title="Hapus" style="background:none;border:none;cursor:pointer;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='rgba(60,64,67,0.08)'" onmouseout="this.style.background='none'">
-            <img src="{{ asset('images/sampah.png') }}" style="width: 16px; height: 16px; opacity: 0.7;">
-        </button>
+        @if(request()->is('sampah') || request('source') === 'sampah')
+            <button onclick="bulkAction('restore')" title="Pulihkan" style="background:none;border:none;cursor:pointer;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='rgba(60,64,67,0.08)'" onmouseout="this.style.background='none'">
+                <img src="{{ asset('images/pulihkan.png') }}" style="width: 16px; height: 16px; opacity: 0.7;">
+            </button>
+            <button onclick="bulkAction('force-delete')" title="Hapus Permanen" style="background:none;border:none;cursor:pointer;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='rgba(60,64,67,0.08)'" onmouseout="this.style.background='none'">
+                <img src="{{ asset('images/sampah.png') }}" style="width: 16px; height: 16px; opacity: 0.7; filter: hue-rotate(320deg) saturate(3) brightness(0.9);">
+            </button>
+        @else
+            <button onclick="bulkAction('download')" title="Download" style="background:none;border:none;cursor:pointer;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='rgba(60,64,67,0.08)'" onmouseout="this.style.background='none'">
+                <img src="{{ asset('images/download.png') }}" style="width: 16px; height: 16px; opacity: 0.7;">
+            </button>
+            <button onclick="bulkAction('trash')" title="Hapus" style="background:none;border:none;cursor:pointer;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;" onmouseover="this.style.background='rgba(60,64,67,0.08)'" onmouseout="this.style.background='none'">
+                <img src="{{ asset('images/sampah.png') }}" style="width: 16px; height: 16px; opacity: 0.7;">
+            </button>
+        @endif
     </div>
 </div>
