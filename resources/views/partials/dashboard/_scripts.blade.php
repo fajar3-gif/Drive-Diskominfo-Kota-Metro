@@ -267,8 +267,8 @@
         <h3 style="margin:0 0 12px 0; font-size:18px; color:#202124;">Hapus permanen?</h3>
         <p style="margin:0 0 24px 0; font-size:14px; color:#5f6368;">Tindakan ini tidak dapat diurungkan.</p>
         <div style="display:flex; justify-content:flex-end; gap:12px;">
-            <button onclick="closeForceDeleteModal()" style="background:white; border:1px solid #dadce0; padding:8px 16px; border-radius:4px; color:#1a73e8; cursor:pointer; font-weight:500; font-size:14px;">Batal</button>
-            <button id="btnConfirmForceDelete" style="background:#d93025; border:none; padding:8px 16px; border-radius:4px; color:white; cursor:pointer; font-weight:500; font-size:14px;" onclick="if(_forceDeleteCallback) _forceDeleteCallback(); closeForceDeleteModal();">Hapus Permanen</button>
+            <button onclick="closeForceDeleteModal()" style="background:white; border:1px solid #dadce0; padding:8px 16px; border-radius:4px; color:#1a73e8; cursor:pointer; font-weight:500; font-size:14px; transition: background 0.2s;" onmouseover="this.style.background='#f1f3f4'" onmouseout="this.style.background='white'">Batal</button>
+            <button id="btnConfirmForceDelete" style="background:#d93025; border:none; padding:8px 16px; border-radius:4px; color:white; cursor:pointer; font-weight:500; font-size:14px; transition: background 0.2s;" onmouseover="this.style.background='#b3261e'" onmouseout="this.style.background='#d93025'" onclick="if(_forceDeleteCallback) _forceDeleteCallback(); closeForceDeleteModal();">Hapus Permanen</button>
         </div>
     </div>
 </div>
