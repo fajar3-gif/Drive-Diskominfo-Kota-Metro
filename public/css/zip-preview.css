@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #202124; /* Dark overlay Google Drive style */
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.zip-modal {
+    background-color: white;
+    width: 90%;
+    max-width: 950px;
+    max-height: 80vh;
+    border-radius: 4px;
+    box-shadow: 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+}
+
+.zip-header {
+    padding: 24px 30px 16px 30px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.zip-title {
+    font-size: 26px;
+    font-weight: 400;
+    color: #3c4043;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.zip-count {
+    font-size: 16px;
+    color: #5f6368;
+    font-weight: 400;
+}
+
+.list-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    padding: 12px 30px;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    color: #70757a;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.list-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 10px;
+}
+
+.list-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    padding: 12px 30px;
+    align-items: center;
+    border-bottom: 1px solid #f1f3f4;
+    color: #3c4043;
+    font-size: 14px;
+}
+
+.list-item:hover {
+    background-color: #f8f9fa;
+}
+
+.item-name {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-weight: 400;
+}
+
+.item-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    opacity: 0.6;
+}
+
+.item-detail {
+    color: #5f6368;
+    font-size: 13px;
+}
+
+.top-bar {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    display: flex;
+    gap: 15px;
+}
+
+.top-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    color: white;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.top-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.empty-zip {
+    padding: 40px;
+    text-align: center;
+    color: #5f6368;
+    font-size: 15px;
+}

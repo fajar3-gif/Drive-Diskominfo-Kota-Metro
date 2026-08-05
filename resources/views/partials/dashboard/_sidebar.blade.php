@@ -9,6 +9,9 @@
                 <p class="folder-popup-title">Buat Folder Baru</p>
                 <form action="{{ url('/folder/create') }}" method="POST">
                     @csrf
+                    @if(isset($folder))
+                        <input type="hidden" name="parent_id" value="{{ $folder->id }}">
+                    @endif
                     <input type="text" name="name" class="folder-popup-input" id="folderNameInput" placeholder="Nama folder" autocomplete="off" required>
                     <div class="folder-popup-actions">
                         <button type="button" class="folder-popup-cancel" onclick="closeFolderPopup()">Batal</button>
@@ -20,6 +23,9 @@
 
         <form action="{{ url('/file/upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm" style="margin: 0;">
             @csrf
+            @if(isset($folder))
+                <input type="hidden" name="folder_id" value="{{ $folder->id }}">
+            @endif
             <input type="file" name="file" id="fileInput" style="display: none;" required onchange="document.getElementById('uploadForm').submit();">
             <button type="button" class="sidebar-btn-outline" onclick="document.getElementById('fileInput').click();">
                 <img src="{{ asset('images/upload-file.png') }}" alt="Upload File" style="width: 20px; height: 20px; object-fit: contain; filter: invert(47%) sepia(15%) saturate(841%) hue-rotate(149deg) brightness(92%) contrast(87%);">
