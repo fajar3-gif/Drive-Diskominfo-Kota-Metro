@@ -82,7 +82,8 @@ class DashboardController extends Controller
             $files = $fileQuery->get();
         }
 
-        return view('terbaru', compact('files'));
+        $folders = collect([]); // Halaman terbaru tidak menampilkan folder
+        return view('terbaru', compact('files', 'folders'));
     }
 
     public function favorit(Request $request)
