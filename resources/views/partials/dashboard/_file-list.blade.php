@@ -17,7 +17,7 @@
 <div class="grid">
 
     @foreach ($folders as $folder)
-        <div class="item-card" data-id="{{ $folder->id }}" data-type="folder" data-url="{{ url('/folder/show/' . $folder->id) }}{{ ($activeMenu ?? 'drive') === 'favorit' ? '?source=favorit' : '' }}">
+        <div class="item-card" data-id="{{ $folder->id }}" data-type="folder" data-url="{{ url('/folder/show/' . $folder->id) }}{{ isset($activeMenu) && $activeMenu !== 'drive' ? '?source=' . $activeMenu : '' }}">
 
             <!-- Kolom 1: Nama -->
             <div class="file-name">
@@ -55,23 +55,34 @@
             <div class="dropdown">
                 <button onclick="toggleDropdown('folder-{{ $folder->id }}')" class="dropbtn">⋮</button>
                 <div id="folder-{{ $folder->id }}" class="dropdown-content">
-                    <a href="#">Download</a>
-                    <form action="{{ url('/folder/'.$folder->id.'/delete') }}" method="POST" style="margin: 0;">
-                        @csrf
-                        <button type="submit">Hapus</button>
-                    </form>
-                    <form action="{{ url('/folder/'.$folder->id.'/favorite') }}" method="POST" style="margin: 0;">
-                        @csrf
-                        <button type="submit" style="display: flex; align-items: center; gap: 8px;">
-                            @if($folder->is_favorite ?? false)
-                                <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
-                                Hapus dari favorit
-                            @else
-                                <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
-                                Tambahkan ke favorit
-                            @endif
-                        </button>
-                    </form>
+                    @if(isset($activeMenu) && $activeMenu === 'sampah')
+                        <form action="{{ url('/sampah/folder/'.$folder->id.'/restore') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit">Pulihkan</button>
+                        </form>
+                        <form action="{{ url('/sampah/folder/'.$folder->id.'/force-delete') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit" style="color: red;">Hapus Permanen</button>
+                        </form>
+                    @else
+                        <a href="#">Download</a>
+                        <form action="{{ url('/folder/'.$folder->id.'/delete') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit">Hapus</button>
+                        </form>
+                        <form action="{{ url('/folder/'.$folder->id.'/favorite') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit" style="display: flex; align-items: center; gap: 8px;">
+                                @if($folder->is_favorite ?? false)
+                                    <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
+                                    Hapus dari favorit
+                                @else
+                                    <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
+                                    Tambahkan ke favorit
+                                @endif
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
@@ -143,23 +154,34 @@
             <div class="dropdown">
                 <button onclick="toggleDropdown('file-{{ $file->id }}')" class="dropbtn">⋮</button>
                 <div id="file-{{ $file->id }}" class="dropdown-content">
-                    <a href="{{ url('/files/'.$file->id.'/download') }}">Download</a>
-                    <form action="{{ url('/file/'.$file->id.'/delete') }}" method="POST" style="margin: 0;">
-                        @csrf
-                        <button type="submit">Hapus</button>
-                    </form>
-                    <form action="{{ url('/file/'.$file->id.'/favorite') }}" method="POST" style="margin: 0;">
-                        @csrf
-                        <button type="submit" style="display: flex; align-items: center; gap: 8px;">
-                            @if($file->is_favorite)
-                                <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
-                                Hapus dari favorit
-                            @else
-                                <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
-                                Tambahkan ke favorit
-                            @endif
-                        </button>
-                    </form>
+                    @if(isset($activeMenu) && $activeMenu === 'sampah')
+                        <form action="{{ url('/sampah/file/'.$file->id.'/restore') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit">Pulihkan</button>
+                        </form>
+                        <form action="{{ url('/sampah/file/'.$file->id.'/force-delete') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit" style="color: red;">Hapus Permanen</button>
+                        </form>
+                    @else
+                        <a href="{{ url('/files/'.$file->id.'/download') }}">Download</a>
+                        <form action="{{ url('/file/'.$file->id.'/delete') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit">Hapus</button>
+                        </form>
+                        <form action="{{ url('/file/'.$file->id.'/favorite') }}" method="POST" style="margin: 0;">
+                            @csrf
+                            <button type="submit" style="display: flex; align-items: center; gap: 8px;">
+                                @if($file->is_favorite)
+                                    <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
+                                    Hapus dari favorit
+                                @else
+                                    <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
+                                    Tambahkan ke favorit
+                                @endif
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
