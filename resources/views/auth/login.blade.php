@@ -8,6 +8,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    {{-- Firebase config diinjeksikan dari server (.env) — tidak ada key di file JS --}}
+    <script>
+        window.__firebaseConfig = {
+            apiKey:            "{{ config('firebase.api_key') }}",
+            authDomain:        "{{ config('firebase.auth_domain') }}",
+            projectId:         "{{ config('firebase.project_id') }}",
+            storageBucket:     "{{ config('firebase.storage_bucket') }}",
+            messagingSenderId: "{{ config('firebase.messaging_sender_id') }}",
+            appId:             "{{ config('firebase.app_id') }}",
+            measurementId:     "{{ config('firebase.measurement_id') }}",
+        };
+    </script>
     @vite('resources/js/app.js')
     <style>
         * {
