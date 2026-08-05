@@ -22,11 +22,14 @@ class SocialAuthController extends Controller
         ]);
 
         try {
-            // Firebase Web API Key (public key, aman dipakai di server)
-            $firebaseApiKey = 'AIzaSyDPhmpfpI6okjVtiPf7hQlbWeKbJV4W8UA';
+            // Firebase Web API Key dari config (.env)
+            $firebaseApiKey = config('firebase.api_key');
 
             // Verifikasi idToken ke Firebase Identity Toolkit REST API
-            $response = Http::post(
+            // Kirim header 'Referer' agar lolos pengecekan Website restrictions di Google Cloud
+            $response = Http::withHeaders([
+                'Referer' => url('/'),
+            ])->post(
                 "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key={$firebaseApiKey}",
                 ['idToken' => $request->idToken]
             );
