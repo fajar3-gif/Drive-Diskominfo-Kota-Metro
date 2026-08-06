@@ -59,12 +59,11 @@
         }
 
         .card {
-            width: 100%;
-            max-width: 400px;
-            padding: 45px 38px;
+            width: 350px;
+            max-width: calc(100vw - 32px);
+            padding: 32px 30px 16px;
             background: #ffffff;
-            /* Border radius kecil */
-            border-radius: 6px;
+            border-radius: 0;
             /* Shadow kuat untuk efek timbul seperti referensi */
             box-shadow:
                 0 25px 60px rgba(0, 0, 0, 0.25),
@@ -124,43 +123,45 @@
 
         .input-group input {
             width: 100%;
-            padding: 12px 16px;
+            height: 52px;
+            padding: 0 16px;
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             color: #1f2937;
-            background-color: #f3f4f6;
-            border: 1.5px solid #e5e7eb;
-            /* Border radius kecil */
-            border-radius: 4px;
+            background-color: #f0f2f5;
+            border: none;
+            border-radius: 0;
             outline: none;
             transition: all 0.25s ease;
-            /* Efek timbul pada input */
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+            box-sizing: border-box;
+            box-shadow: none;
         }
 
         .input-group input::placeholder {
             color: #9ca3af;
         }
 
-        .input-group input:focus {
-            border-color: #2563eb;
-            background-color: #ffffff;
-            box-shadow:
-                0 0 0 3px rgba(37, 99, 235, 0.15),
-                inset 0 1px 2px rgba(0, 0, 0, 0.02);
+        /* Override browser autofill background */
+        .input-group input:-webkit-autofill,
+        .input-group input:-webkit-autofill:hover, 
+        .input-group input:-webkit-autofill:focus, 
+        .input-group input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #f0f2f5 inset !important;
+            -webkit-text-fill-color: #1f2937 !important;
+            transition: background-color 5000s ease-in-out 0s;
         }
 
         .btn-register {
             width: 100%;
-            padding: 13px;
+            height: 40px;
+            padding: 0;
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 600;
             color: #ffffff;
             background: #2563eb;
             border: none;
-            /* Border radius disesuaikan */
-            border-radius: 6px;
+            border-radius: 0;
             cursor: pointer;
             transition: all 0.3s ease;
             letter-spacing: 0.3px;

@@ -73,12 +73,11 @@
         }
 
         .card {
-            width: 100%;
-            max-width: 340px;
-            padding: 36px 30px;
+            width: 350px;
+            max-width: calc(100vw - 32px);
+            padding: 32px 30px 16px;
             background: #ffffff;
-            /* Border radius kecil */
-            border-radius: 6px;
+            border-radius: 0;
             /* Shadow kuat untuk efek timbul seperti referensi */
             box-shadow:
                 0 25px 60px rgba(0, 0, 0, 0.25),
@@ -90,22 +89,23 @@
             font-size: 22px;
             font-weight: 700;
             color: #1e3a5f;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             text-align: center;
+        }
+
+        .error-wrapper:empty {
+            display: none;
         }
 
         .error {
             color: #dc2626;
             font-size: 13px;
-            margin-bottom: 16px;
-            padding: 10px 14px;
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            border-radius: 4px;
+            margin-top: -4px;
+            margin-bottom: 8px;
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
         .input-group label {
@@ -118,47 +118,48 @@
 
         .input-group input {
             width: 100%;
-            padding: 12px 16px;
+            height: 52px;
+            padding: 0 16px;
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             color: #1f2937;
-            background-color: #f3f4f6;
-            border: 1.5px solid #e5e7eb;
-            /* Border radius kecil */
-            border-radius: 4px;
+            background-color: #f0f2f5;
+            border: none;
+            border-radius: 0;
             outline: none;
             transition: all 0.25s ease;
-            /* Efek timbul pada input */
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.04);
+            box-sizing: border-box;
+            box-shadow: none;
         }
 
         .input-group input::placeholder {
             color: #9ca3af;
         }
 
-        .input-group input:focus {
-            border-color: #2563eb;
-            background-color: #ffffff;
-            box-shadow:
-                0 0 0 3px rgba(37, 99, 235, 0.15),
-                inset 0 1px 2px rgba(0, 0, 0, 0.02);
+        /* Override browser autofill background */
+        .input-group input:-webkit-autofill,
+        .input-group input:-webkit-autofill:hover, 
+        .input-group input:-webkit-autofill:focus, 
+        .input-group input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #f0f2f5 inset !important;
+            -webkit-text-fill-color: #1f2937 !important;
+            transition: background-color 5000s ease-in-out 0s;
         }
 
         .btn-login {
             width: 100%;
-            padding: 13px;
+            height: 40px;
+            padding: 0;
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 600;
             color: #ffffff;
             background: #2563eb;
             border: none;
-            /* Border radius disesuaikan */
-            border-radius: 6px;
+            border-radius: 0;
             cursor: pointer;
             transition: all 0.3s ease;
             letter-spacing: 0.3px;
-            /* Efek timbul pada tombol */
             box-shadow: none;
         }
 
@@ -177,7 +178,7 @@
         .divider {
             display: flex;
             align-items: center;
-            margin: 14px 0;
+            margin: 8px 0;
         }
 
         .divider hr {
@@ -201,19 +202,18 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            padding: 12px;
+            height: 40px;
+            padding: 0;
             background-color: #ffffff;
             color: #374151;
             font-family: 'Inter', sans-serif;
             font-size: 13px;
             font-weight: 600;
             border: 1.5px solid #e5e7eb;
-            /* Border radius kecil */
-            border-radius: 4px;
+            border-radius: 0;
             cursor: pointer;
             text-decoration: none;
             transition: all 0.25s ease;
-            /* Efek timbul ringan */
             box-shadow: none;
         }
 
@@ -241,7 +241,7 @@
             text-align: center;
             font-size: 13px;
             color: #6b7280;
-            margin-top: 22px;
+            margin-top: 12px;
         }
 
         .register-link a {
@@ -272,14 +272,6 @@
         <div class="card">
             <h2>Masuk ke Akun</h2>
 
-            @if(session('status'))
-                <div style="color: #059669; font-size: 13px; margin-bottom: 16px; padding: 10px 14px; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 4px;">{{ session('status') }}</div>
-            @endif
-
-            @if($errors->any())
-                <div class="error">{{ $errors->first() }}</div>
-            @endif
-
             <form action="{{ route('login') }}" method="POST">
                 @csrf
                 <div class="input-group">
@@ -290,7 +282,16 @@
                     <label>Password</label>
                     <input type="password" name="password" placeholder="Masukkan password" required>
                 </div>
-                <div style="text-align: right; margin-bottom: 18px; margin-top: -10px;">
+                
+                <div class="error-wrapper">
+                    @if(session('status'))
+                        <div style="color: #059669; font-size: 13px;">{{ session('status') }}</div>
+                    @elseif($errors->any())
+                        <div class="error">{{ $errors->first() }}</div>
+                    @endif
+                </div>
+
+                <div style="text-align: right; margin-bottom: 18px; margin-top: 0;">
                     <a href="{{ route('password.request') }}" style="font-size: 12px; color: #2563eb; text-decoration: none; font-weight: 500; transition: color 0.2s;"
                        onmouseover="this.style.color='#1d4ed8'; this.style.textDecoration='underline'"
                        onmouseout="this.style.color='#2563eb'; this.style.textDecoration='none'">Lupa Password?</a>
