@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/folder/show/{id}', [FolderController::class, 'showFolder']);
     Route::post('/folder/{id}/delete', [FolderController::class, 'deleteFolder']);
     Route::post('/folder/{id}/favorite', [FolderController::class, 'toggleFavoriteFolder']);
+    Route::get('/folder/{id}/download', [FolderController::class, 'downloadFolder']);
     
     // --- FILE ACTIONS ---
     Route::post('/file/upload', [FileController::class, 'storeFile']);

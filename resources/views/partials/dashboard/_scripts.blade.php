@@ -127,24 +127,16 @@
             cnt.textContent = _sel.size + ' dipilih';
             if (saBtn) {
                 if (_sel.size === _cards().length) {
-                    saBtn.style.background   = '#1a73e8';
-                    saBtn.style.borderColor  = '#1a73e8';
-                    saBtn.style.color        = 'white';
+                    saBtn.classList.add('selected');
                 } else {
-                    saBtn.style.background   = 'white';
-                    saBtn.style.borderColor  = '#bcc0c4';
-                    saBtn.style.color        = 'white';
+                    saBtn.classList.remove('selected');
                 }
             }
         } else {
             bar.style.opacity = '0';
             bar.style.visibility = 'hidden';
             if(filterBar) { filterBar.style.opacity = '1'; filterBar.style.visibility = 'visible'; }
-            if (saBtn) {
-                saBtn.style.background  = 'white';
-                saBtn.style.borderColor = '#bcc0c4';
-                saBtn.style.color       = 'white';
-            }
+            if (saBtn) saBtn.classList.remove('selected');
         }
     }
 

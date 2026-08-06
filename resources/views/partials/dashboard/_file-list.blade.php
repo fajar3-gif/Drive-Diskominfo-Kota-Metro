@@ -1,7 +1,7 @@
 <!-- HEADER DAFTAR (GRID KOLOM) -->
 <div class="list-header">
     <div style="display: flex; align-items: center;">
-        <span class="select-checkbox" id="selectAllBtn" style="opacity: 1; margin-right: 12px;" onclick="event.stopPropagation(); toggleSelectAll()" title="Pilih Semua">✓</span>
+        <span class="select-checkbox" id="selectAllBtn" style="opacity: 1; margin-right: 12px;" onclick="event.stopPropagation(); toggleSelectAll()" title="Pilih Semua"></span>
         <div style="cursor: pointer; display: flex; align-items: center;" onclick="window.location.href='?order={{ (isset($order) && $order === 'desc') ? 'asc' : 'desc' }}'" title="Urutkan {{ (isset($order) && $order === 'desc') ? 'A-Z' : 'Z-A' }}">
             <span style="display: inline-block; width: 24px; text-align: center; margin-right: 8px;">{{ (isset($order) && $order === 'desc') ? '↓' : '↑' }}</span>
             <span>Nama</span>
@@ -21,7 +21,7 @@
 
             <!-- Kolom 1: Nama -->
             <div class="file-name">
-                <span class="select-checkbox">✓</span>
+                <span class="select-checkbox"></span>
                 <img src="{{ asset('images/ikon-folder.png') }}" alt="Folder" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;">
                 <span>{{ $folder->name }}</span>
             </div>
@@ -65,7 +65,7 @@
                             <button type="submit" style="color: red;">Hapus Permanen</button>
                         </form>
                     @else
-                        <a href="#">Download</a>
+                        <a href="{{ url('/folder/'.$folder->id.'/download') }}">Download</a>
                         <form action="{{ url('/folder/'.$folder->id.'/delete') }}" method="POST" style="margin: 0;">
                             @csrf
                             <button type="submit">Hapus</button>
@@ -74,7 +74,7 @@
                             @csrf
                             <button type="submit" style="display: flex; align-items: center; gap: 8px;">
                                 @if($folder->is_favorite ?? false)
-                                    <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
+                                    <img src="{{ asset('images/dibintangi.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
                                     Hapus dari favorit
                                 @else
                                     <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
@@ -94,7 +94,7 @@
 
             <!-- Kolom 1: Nama -->
             <div class="file-name">
-                <span class="select-checkbox">✓</span>
+                <span class="select-checkbox"></span>
                 @if(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)) === 'pdf')
                     <img src="{{ asset('images/pdf.png') }}" alt="PDF" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;">
                 @elseif(in_array(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)), ['doc', 'docx']))
@@ -172,8 +172,8 @@
                         <form action="{{ url('/file/'.$file->id.'/favorite') }}" method="POST" style="margin: 0;">
                             @csrf
                             <button type="submit" style="display: flex; align-items: center; gap: 8px;">
-                                @if($file->is_favorite)
-                                    <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
+                                @if($file->is_favorite ?? false)
+                                    <img src="{{ asset('images/dibintangi.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">
                                     Hapus dari favorit
                                 @else
                                     <img src="{{ asset('images/favorite.png') }}" alt="Ikon" style="width: 16px; height: 16px; opacity: 0.6;">

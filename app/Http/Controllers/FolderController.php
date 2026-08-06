@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Folder;
+use App\Services\ZipService;
 
 class FolderController extends Controller
 {
+    protected ZipService $zipService;
+
+    public function __construct(ZipService $zipService)
+    {
+        $this->zipService = $zipService;
+    }
     public function storeFolder(Request $request)
     {
         $request->validate([
@@ -47,18 +54,6 @@ class FolderController extends Controller
         $folder = Folder::withTrashed()->where('user_id', Auth::id())->findOrFail($id);
         $order  = $request->get('order', 'asc');
 
-        $folders = Folder::withTrashed()
-            ->where('user_id', Auth::id())
-            ->where('parent_id', $folder->id)
-            ->orderBy('name', $order)
-            ->get();
-
-        $files = \App\Models\FileItem::withTrashed()
-            ->where('user_id', Auth::id())
-            ->where('folder_id', $folder->id)
-            ->orderBy('name', $order)
-            ->get();
-
         $breadcrumbs = [];
         $current     = $folder;
         while ($current) {
@@ -70,6 +65,22 @@ class FolderController extends Controller
 
         // Deteksi apakah folder ini (atau root-nya) berasal dari sampah
         $isTrashed = $breadcrumbs[0]->trashed();
+
+        $folderQuery = Folder::where('user_id', Auth::id())
+            ->where('parent_id', $folder->id)
+            ->orderBy('name', $order);
+
+        $fileQuery = \App\Models\FileItem::where('user_id', Auth::id())
+            ->where('folder_id', $folder->id)
+            ->orderBy('name', $order);
+
+        if ($isTrashed) {
+            $folderQuery->withTrashed();
+            $fileQuery->withTrashed();
+        }
+
+        $folders = $folderQuery->get();
+        $files   = $fileQuery->get();
 
         return view('folder', compact('folder', 'folders', 'files', 'breadcrumbs', 'order', 'isTrashed'));
     }
@@ -97,9 +108,29 @@ class FolderController extends Controller
 
     public function toggleFavoriteFolder($id)
     {
-        $folder              = Folder::where('user_id', Auth::id())->findOrFail($id);
+        $folder = Folder::where('user_id', Auth::id())->findOrFail($id);
         $folder->is_favorite = !$folder->is_favorite;
         $folder->save();
-        return back()->with('success', 'Status favorit folder diperbarui.');
+
+        return back();
+    }
+
+    public function downloadFolder($id)
+    {
+        $folder = Folder::where('user_id', Auth::id())->findOrFail($id);
+
+        $zipName = $folder->name . '_' . time() . '.zip';
+        $zipPath = storage_path('app/private/' . $zipName);
+
+        $zip = new \ZipArchive();
+        if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) === TRUE) {
+            $zip->addEmptyDir($folder->name);
+            $this->zipService->addFolderToZip($zip, $folder, $folder->name . '/', Auth::id());
+            $zip->close();
+
+            return response()->download($zipPath)->deleteFileAfterSend(true);
+        }
+
+        return back()->with('error', 'Gagal membuat file ZIP untuk folder.');
     }
 }

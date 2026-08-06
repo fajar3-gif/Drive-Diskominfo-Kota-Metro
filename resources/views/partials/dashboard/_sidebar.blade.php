@@ -14,7 +14,7 @@
                 <p class="folder-popup-title">Buat Folder Baru</p>
                 <form action="{{ url('/folder/create') }}" method="POST">
                     @csrf
-                    @if(isset($folder))
+                    @if(isset($folder) && ($activeMenu ?? 'drive') === 'drive')
                         <input type="hidden" name="parent_id" value="{{ $folder->id }}">
                     @endif
                     <input type="text" name="name" class="folder-popup-input" id="folderNameInput" placeholder="Nama folder" autocomplete="off" required>
@@ -28,7 +28,7 @@
 
         <form action="{{ url('/file/upload') }}" method="POST" enctype="multipart/form-data" id="uploadForm" style="margin: 0;">
             @csrf
-            @if(isset($folder))
+            @if(isset($folder) && ($activeMenu ?? 'drive') === 'drive')
                 <input type="hidden" name="folder_id" value="{{ $folder->id }}">
             @endif
             <input type="file" name="file" id="fileInput" style="display: none;" required onchange="document.getElementById('uploadForm').submit();">
