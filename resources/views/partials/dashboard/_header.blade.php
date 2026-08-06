@@ -1,11 +1,6 @@
 <div class="header">
-    <div style="display: flex; align-items: center; gap: 12px; width: 220px;">
-        <img src="{{ asset('images/nih.png') }}" alt="Logo Kominfo" style="width: 50px; height: 50px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); flex-shrink: 0;">
-        <h2 class="logo-title" style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: 0.5px;">KOMSAFE</h2>
-    </div>
-
     <!-- Form Pencarian (Kiri menyesuaikan konten) -->
-    <form action="{{ url('/dashboard') }}" method="GET" style="display: flex; gap: 12px; flex: 1; max-width: 600px; margin: 0 auto 0 40px; justify-content: flex-start; align-items: center;">
+    <form action="{{ url('/dashboard') }}" method="GET" style="display: flex; gap: 12px; flex: 1; max-width: 600px; margin: 0 auto 0 0; justify-content: flex-start; align-items: center;">
         <div style="position: relative; flex: 1; display: flex; align-items: center;">
             <button type="submit" style="position: absolute; left: 14px; background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center;" title="Cari">
                 <img src="{{ asset('images/telusuri.png') }}" alt="Cari" style="width: 20px; height: 20px; opacity: 0.6; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
