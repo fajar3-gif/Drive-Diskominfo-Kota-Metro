@@ -7,7 +7,7 @@
     <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
         <div class="folder-popup-wrapper">
             <button type="button" class="sidebar-btn" onclick="toggleFolderPopup()">
-                <img src="{{ asset('images/tambah-folder.png') }}" alt="Tambah Folder" style="width: 20px; height: 20px; object-fit: contain; filter: brightness(0) invert(1);">
+                <img src="{{ asset('images/tambah-folder.png') }}" alt="Tambah Folder" style="width: 20px; height: 20px; object-fit: contain; filter: brightness(0) invert(1) !important; -webkit-filter: brightness(0) invert(1) !important;">
                 Tambah Folder
             </button>
             <div class="folder-popup" id="folderPopup">

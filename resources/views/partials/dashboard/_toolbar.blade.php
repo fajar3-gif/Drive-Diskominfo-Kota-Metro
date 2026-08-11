@@ -1,5 +1,5 @@
 <!-- TOOLBAR WRAPPER -->
-<div style="position: relative; min-height: 36px; margin-bottom: 12px; display: flex; align-items: center; width: 100%;">
+<div style="position: relative; z-index: 20; min-height: 36px; margin-bottom: 12px; display: flex; align-items: center; width: 100%;">
 
     <!-- FILTER BAR -->
     <div id="filter-bar" style="position: absolute; top: 0; left: 0; width: 100%; display: flex; gap: 10px; transition: opacity 0.2s ease, visibility 0.2s ease; opacity: 1; visibility: visible; z-index: 5;">
@@ -11,7 +11,9 @@
             </button>
             <div id="type-filter-menu" class="dropdown-content" style="top: 100%; left: 0; min-width: 150px; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
                 <a href="{{ url()->current() }}?type=&modified={{ request('modified') }}" style="{{ request('type') == '' ? 'background-color: #f0f0f0; font-weight: 500;' : '' }}">Semua Jenis</a>
-                <a href="{{ url()->current() }}?type=folder&modified={{ request('modified') }}" style="{{ request('type') == 'folder' ? 'background-color: #f0f0f0; font-weight: 500;' : '' }}">Folder</a>
+                @if(($activeMenu??'drive')!=='terbaru')
+                    <a href="{{ url()->current() }}?type=folder&modified={{ request('modified') }}" style="{{ request('type') == 'folder' ? 'background-color: #f0f0f0; font-weight: 500;' : '' }}">Folder</a>
+                @endif
                 <a href="{{ url()->current() }}?type=file&modified={{ request('modified') }}" style="{{ request('type') == 'file' ? 'background-color: #f0f0f0; font-weight: 500;' : '' }}">File</a>
             </div>
         </div>
@@ -50,7 +52,7 @@
     </div>
 
     <!-- SELECTION BAR -->
-    <div id="selection-bar" style="position: absolute; top: 0; left: 0; width: 100%; height: 32px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 14px; background: #f0f0f0; border: 1px solid #cccccc; border-radius: 4px; z-index: 10; transition: opacity 0.2s ease, visibility 0.2s ease; opacity: 0; visibility: hidden;">
+    <div id="selection-bar" style="position: absolute; top: 0; left: 0; width: 100%; height: 32px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 14px; background: #f0f0f0; border: none; border-radius: 4px; z-index: 10; transition: opacity 0.2s ease, visibility 0.2s ease; opacity: 0; visibility: hidden;">
         <button onclick="clearSelection()" style="background:none;border:none;cursor:pointer;width:28px;height:28px;border-radius:4px;display:flex;align-items:center;justify-content:center;" title="Batalkan pilihan" onmouseover="this.style.background='rgba(60,64,67,0.10)'" onmouseout="this.style.background='none'">
             <img src="{{ asset('images/close.png') }}" style="width:14px;height:14px;opacity:0.65;">
         </button>
