@@ -22,7 +22,7 @@
             min-height: 100vh;
             margin: 0;
             /* Background solid blue */
-            background: #1b5c96;
+            background: #0F3D91;
             position: relative;
             overflow: hidden;
         }
@@ -74,14 +74,14 @@
         .card h2 {
             font-size: 22px;
             font-weight: 700;
-            color: #1e3a5f;
+            color: #1f1f1f;
             margin-bottom: 8px;
             text-align: center;
         }
 
         .card .subtitle {
             font-size: 13px;
-            color: #6b7280;
+            color: #555555;
             text-align: center;
             margin-bottom: 28px;
         }
@@ -118,7 +118,7 @@
             margin-bottom: 6px;
             font-size: 13px;
             font-weight: 600;
-            color: #374151;
+            color: #3a3a3a;
         }
 
         .input-group input {
@@ -159,7 +159,7 @@
             font-size: 14px;
             font-weight: 600;
             color: #ffffff;
-            background: #2563eb;
+            background: #0F3D91;
             border: none;
             border-radius: 0;
             cursor: pointer;
@@ -170,13 +170,13 @@
         }
 
         .btn-register:hover {
-            background: #1e40af;
+            background: #0d3580;
             box-shadow: none;
         }
 
         .btn-register:active {
             transform: translateY(0);
-            background: #1e40af;
+            background: #0d3580;
             box-shadow: none;
         }
 
@@ -189,14 +189,14 @@
         }
 
         .login-link a {
-            color: #2563eb;
+            color: #0F3D91;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s ease;
         }
 
         .login-link a:hover {
-            color: #1d4ed8;
+            color: #0d3580;
             text-decoration: underline;
         }
 

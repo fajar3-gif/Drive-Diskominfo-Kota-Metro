@@ -7,7 +7,7 @@
     <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
         <div class="folder-popup-wrapper">
             <button type="button" class="sidebar-btn" onclick="toggleFolderPopup()">
-                <img src="{{ asset('images/tambah-folder.png') }}" alt="Tambah Folder" style="width: 20px; height: 20px; object-fit: contain; filter: invert(24%) sepia(61%) saturate(1923%) hue-rotate(185deg) brightness(98%) contrast(92%);">
+                <img src="{{ asset('images/tambah-folder.png') }}" alt="Tambah Folder" style="width: 20px; height: 20px; object-fit: contain; filter: brightness(0) invert(1);">
                 Tambah Folder
             </button>
             <div class="folder-popup" id="folderPopup">
@@ -33,7 +33,7 @@
             @endif
             <input type="file" name="file" id="fileInput" style="display: none;" required onchange="document.getElementById('uploadForm').submit();">
             <button type="button" class="sidebar-btn-outline" onclick="document.getElementById('fileInput').click();">
-                <img src="{{ asset('images/upload-file.png') }}" alt="Upload File" style="width: 20px; height: 20px; object-fit: contain; filter: brightness(0) invert(1);">
+                <img src="{{ asset('images/upload-file.png') }}" alt="Upload File" style="width: 20px; height: 20px; object-fit: contain; filter: brightness(0); opacity: 0.7;">
                 Upload File
             </button>
             @error('file')
@@ -79,12 +79,12 @@
         }
     @endphp
     <div style="margin-top: auto; padding: 20px 5px 0 5px;">
-        <div style="font-size: 14px; color: #ffffff; font-weight: 600; margin-bottom: 4px;">Penyimpanan</div>
-        <div style="font-size: 13px; color: #e2e8f0; font-weight: 500; margin-bottom: 8px;">
+        <div style="font-size: 14px; color: #374151; font-weight: 600; margin-bottom: 4px;">Penyimpanan</div>
+        <div style="font-size: 13px; color: #6b7280; font-weight: 500; margin-bottom: 8px;">
             {{ $usedText }} dari 1 GB terpakai
         </div>
-        <div style="width: 100%; background-color: rgba(255,255,255,0.2); height: 6px; border-radius: 4px; overflow: hidden; margin-bottom: 8px;">
-            <div style="width: {{ $percentage }}%; background-color: #ffffff; height: 100%; border-radius: 4px; transition: width 0.3s ease;"></div>
+        <div style="width: 100%; background-color: #d1d5db; height: 6px; border-radius: 4px; overflow: hidden; margin-bottom: 8px;">
+            <div style="width: {{ $percentage }}%; background-color: #0F3D91; height: 100%; border-radius: 4px; transition: width 0.3s ease;"></div>
         </div>
     </div>
 </div>

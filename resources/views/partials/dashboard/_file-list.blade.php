@@ -1,20 +1,19 @@
-<!-- HEADER DAFTAR (GRID KOLOM) -->
-<div class="list-header">
-    <div style="display: flex; align-items: center;">
-        <span class="select-checkbox" id="selectAllBtn" style="opacity: 1; margin-right: 12px;" onclick="event.stopPropagation(); toggleSelectAll()" title="Pilih Semua"></span>
-        <div style="cursor: pointer; display: flex; align-items: center;" onclick="window.location.href='?order={{ (isset($order) && $order === 'desc') ? 'asc' : 'desc' }}'" title="Urutkan {{ (isset($order) && $order === 'desc') ? 'A-Z' : 'Z-A' }}">
-            <span style="display: inline-block; width: 24px; text-align: center; margin-right: 8px;">{{ (isset($order) && $order === 'desc') ? '↓' : '↑' }}</span>
-            <span>Nama</span>
-        </div>
-    </div>
-    <div>Tanggal ditambahkan</div>
-    <div>Tipe</div>
-    <div>Ukuran</div>
-    <div></div>
-</div>
-
 <!-- CONTAINER DAFTAR ITEM -->
 <div class="grid">
+    <!-- HEADER DAFTAR (GRID KOLOM) -->
+    <div class="list-header">
+        <div style="display: flex; align-items: center;">
+            <span class="select-checkbox" id="selectAllBtn" style="opacity: 1; margin-right: 12px;" onclick="event.stopPropagation(); toggleSelectAll()" title="Pilih Semua"></span>
+            <div style="cursor: pointer; display: flex; align-items: center;" onclick="window.location.href='?order={{ (isset($order) && $order === 'desc') ? 'asc' : 'desc' }}'" title="Urutkan {{ (isset($order) && $order === 'desc') ? 'A-Z' : 'Z-A' }}">
+                <span style="display: inline-block; width: 24px; text-align: center; margin-right: 12px;">{{ (isset($order) && $order === 'desc') ? '↓' : '↑' }}</span>
+                <span>Nama</span>
+            </div>
+        </div>
+        <div>Tanggal ditambahkan</div>
+        <div>Tipe</div>
+        <div>Ukuran</div>
+        <div></div>
+    </div>
 
     @foreach ($folders as $folder)
         <div class="item-card" data-id="{{ $folder->id }}" data-type="folder" data-url="{{ url('/folder/show/' . $folder->id) }}{{ isset($activeMenu) && $activeMenu !== 'drive' ? '?source=' . $activeMenu : '' }}">
@@ -22,7 +21,7 @@
             <!-- Kolom 1: Nama -->
             <div class="file-name">
                 <span class="select-checkbox"></span>
-                <img src="{{ asset('images/ikon-folder.png') }}" alt="Folder" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;">
+                <img src="{{ asset('images/ikon-folder.png') }}" alt="Folder" style="width: 24px; height: 24px; object-fit: contain;">
                 <span>{{ $folder->name }}</span>
             </div>
 
@@ -96,19 +95,19 @@
             <div class="file-name">
                 <span class="select-checkbox"></span>
                 @if(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)) === 'pdf')
-                    <img src="{{ asset('images/pdf.png') }}" alt="PDF" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;">
+                    <img src="{{ asset('images/pdf.png') }}" alt="PDF" style="width: 24px; height: 24px; object-fit: contain;">
                 @elseif(in_array(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)), ['doc', 'docx']))
-                    <img src="{{ asset('images/doc.png') }}" alt="Word" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;">
+                    <img src="{{ asset('images/doc.png') }}" alt="Word" style="width: 24px; height: 24px; object-fit: contain;">
                 @elseif(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)) === 'zip')
-                    <img src="{{ asset('images/zip.png') }}" alt="ZIP" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;">
+                    <img src="{{ asset('images/zip.png') }}" alt="ZIP" style="width: 24px; height: 24px; object-fit: contain;">
                 @elseif(in_array(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)), ['mp4', 'mkv', 'avi']))
-                    <img src="{{ asset('images/video.png') }}" alt="Video" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;">
+                    <img src="{{ asset('images/video.png') }}" alt="Video" style="width: 24px; height: 24px; object-fit: contain;">
                 @elseif(in_array(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)), ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg']))
-                    <img src="{{ asset('images/image.png') }}" alt="Image" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;">
+                    <img src="{{ asset('images/image.png') }}" alt="Image" style="width: 24px; height: 24px; object-fit: contain;">
                 @elseif(in_array(strtolower(pathinfo($file->name, PATHINFO_EXTENSION)), ['ppt', 'pptx']))
-                    <img src="{{ asset('images/ppt.png') }}" alt="PPT" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;">
+                    <img src="{{ asset('images/ppt.png') }}" alt="PPT" style="width: 24px; height: 24px; object-fit: contain;">
                 @else
-                    <img src="{{ asset('images/file.png') }}" alt="File" style="width: 24px; height: 24px; object-fit: contain; margin-right: 8px;">
+                    <img src="{{ asset('images/file.png') }}" alt="File" style="width: 24px; height: 24px; object-fit: contain;">
                 @endif
                 <span>{{ $file->name }}</span>
             </div>
