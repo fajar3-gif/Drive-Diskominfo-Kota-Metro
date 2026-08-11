@@ -10,11 +10,13 @@
                 {{ request('type') == 'folder' ? 'Folder' : (request('type') == 'file' ? 'File' : 'Jenis') }} <span style="font-size: 10px;">▼</span>
             </button>
             <div id="type-filter-menu" class="dropdown-content" style="top: 100%; left: 0; min-width: 150px; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
-                <a href="{{ url()->current() }}?type=&modified={{ request('modified') }}" style="{{ request('type') == '' ? 'background-color: #f0f0f0; font-weight: 500;' : '' }}">Semua Jenis</a>
                 @if(($activeMenu??'drive')!=='terbaru')
+                    <a href="{{ url()->current() }}?type=&modified={{ request('modified') }}" style="{{ request('type') == '' ? 'background-color: #f0f0f0; font-weight: 500;' : '' }}">Semua Jenis</a>
                     <a href="{{ url()->current() }}?type=folder&modified={{ request('modified') }}" style="{{ request('type') == 'folder' ? 'background-color: #f0f0f0; font-weight: 500;' : '' }}">Folder</a>
+                    <a href="{{ url()->current() }}?type=file&modified={{ request('modified') }}" style="{{ request('type') == 'file' ? 'background-color: #f0f0f0; font-weight: 500;' : '' }}">File</a>
+                @else
+                    <a href="{{ url()->current() }}?type=&modified={{ request('modified') }}" style="{{ request('type') == '' ? 'background-color: #f0f0f0; font-weight: 500;' : '' }}">Semua File</a>
                 @endif
-                <a href="{{ url()->current() }}?type=file&modified={{ request('modified') }}" style="{{ request('type') == 'file' ? 'background-color: #f0f0f0; font-weight: 500;' : '' }}">File</a>
             </div>
         </div>
 

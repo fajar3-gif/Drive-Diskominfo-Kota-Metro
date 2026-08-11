@@ -39,7 +39,7 @@
             </div>
 
             {{-- TOOLBAR: Filter, Selection Bar, View Toggle --}}
-            @include('partials.dashboard._toolbar')
+            @include('partials.dashboard._toolbar', ['activeMenu' => 'terbaru'])
 
             {{-- DAFTAR FOLDER & FILE --}}
             @include('partials.dashboard._file-list', ['activeMenu' => 'terbaru'])
