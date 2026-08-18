@@ -6,7 +6,7 @@
 
         <!-- Type Filter -->
         <div class="dropdown" style="position: relative;">
-            <button class="filter-btn" onclick="toggleDropdown('type-filter-menu')" style="background-color: {{ request('type') ? '#e8eaed' : '#f0f0f0' }}; border: 1px solid {{ request('type') ? '#9aa0a6' : '#cccccc' }}; border-radius: 4px; padding: 4px 14px; height: 32px; box-sizing: border-box; font-size: 14px; color: #334155; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#e0e0e0'" onmouseout="this.style.backgroundColor='{{ request('type') ? '#e8eaed' : '#f0f0f0' }}'">
+            <button class="filter-btn" onclick="toggleDropdown('type-filter-menu')" style="background-color: {{ request('type') ? '#e8eaed' : 'transparent' }}; border: 1px solid #d6d9e3; border-top: 1.5px solid #e0e3ec; border-bottom: 1.5px solid #b8bcc8; border-left: 1.5px solid #d2d5df; border-right: 1.5px solid #d2d5df; border-radius: 4px; padding: 4px 14px; height: 32px; box-sizing: border-box; font-size: 14px; color: #334155; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f4f5f7'" onmouseout="this.style.backgroundColor='{{ request('type') ? '#e8eaed' : 'transparent' }}'">
                 {{ request('type') == 'folder' ? 'Folder' : (request('type') == 'file' ? 'File' : 'Jenis') }} <span style="font-size: 10px;">▼</span>
             </button>
             <div id="type-filter-menu" class="dropdown-content" style="top: 100%; left: 0; min-width: 150px; margin-top: 4px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
@@ -22,7 +22,7 @@
 
         <!-- Modified Filter -->
         <div class="dropdown" style="position: relative;">
-            <button class="filter-btn" onclick="toggleDropdown('modified-filter-menu')" style="background-color: {{ request('modified') ? '#e8eaed' : '#f0f0f0' }}; border: 1px solid {{ request('modified') ? '#9aa0a6' : '#cccccc' }}; border-radius: 4px; padding: 4px 14px; height: 32px; box-sizing: border-box; font-size: 14px; color: #334155; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#e0e0e0'" onmouseout="this.style.backgroundColor='{{ request('modified') ? '#e8eaed' : '#f0f0f0' }}'">
+            <button class="filter-btn" onclick="toggleDropdown('modified-filter-menu')" style="background-color: {{ request('modified') ? '#e8eaed' : 'transparent' }}; border: 1px solid #d6d9e3; border-top: 1.5px solid #e0e3ec; border-bottom: 1.5px solid #b8bcc8; border-left: 1.5px solid #d2d5df; border-right: 1.5px solid #d2d5df; border-radius: 4px; padding: 4px 14px; height: 32px; box-sizing: border-box; font-size: 14px; color: #334155; display: flex; align-items: center; gap: 8px; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#f4f5f7'" onmouseout="this.style.backgroundColor='{{ request('modified') ? '#e8eaed' : 'transparent' }}'">
                 @php
                     $modLabel = match(request('modified')) {
                         'today'   => 'Hari ini',
@@ -42,19 +42,19 @@
         </div>
 
         <!-- VIEW TOGGLES -->
-        <div style="margin-left: auto; display: flex; align-items: center; background-color: #f0f0f0; border: 1px solid #cccccc; border-radius: 4px; overflow: hidden; height: 32px;">
-            <button onclick="toggleViewMode('list')" id="btn-view-list" style="background: #e0e0e0; border: none; padding: 0 10px; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #1f2937;" title="Tampilan Daftar">
+        <div style="margin-left: auto; display: flex; align-items: center; background-color: transparent; border: 1px solid #d6d9e3; border-top: 1.5px solid #e0e3ec; border-bottom: 1.5px solid #b8bcc8; border-left: 1.5px solid #d2d5df; border-right: 1.5px solid #d2d5df; border-radius: 4px; overflow: hidden; height: 32px;">
+            <button onclick="toggleViewMode('list')" id="btn-view-list" class="view-toggle-btn active" title="Tampilan Daftar">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
             </button>
-            <div style="width: 1px; height: 100%; background: #cccccc;"></div>
-            <button onclick="toggleViewMode('grid')" id="btn-view-grid" style="background: transparent; border: none; padding: 0 10px; height: 100%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #64748b;" title="Tampilan Petak">
+            <div style="width: 1px; height: 100%; background: #d9dce5;"></div>
+            <button onclick="toggleViewMode('grid')" id="btn-view-grid" class="view-toggle-btn" title="Tampilan Petak">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
             </button>
         </div>
     </div>
 
     <!-- SELECTION BAR -->
-    <div id="selection-bar" style="position: absolute; top: 0; left: 0; width: 100%; height: 32px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 14px; background: #f0f0f0; border: none; border-radius: 4px; z-index: 10; transition: opacity 0.2s ease, visibility 0.2s ease; opacity: 0; visibility: hidden;">
+    <div id="selection-bar" style="position: absolute; top: 0; left: 0; width: 100%; height: 32px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 14px; background: #e8f0fe; border: none; border-radius: 4px; z-index: 10; transition: opacity 0.2s ease, visibility 0.2s ease; opacity: 0; visibility: hidden;">
         <button onclick="clearSelection()" style="background:none;border:none;cursor:pointer;width:28px;height:28px;border-radius:4px;display:flex;align-items:center;justify-content:center;" title="Batalkan pilihan" onmouseover="this.style.background='rgba(60,64,67,0.10)'" onmouseout="this.style.background='none'">
             <img src="{{ asset('images/close.png') }}" style="width:14px;height:14px;opacity:0.65;">
         </button>

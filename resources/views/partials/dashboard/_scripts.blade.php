@@ -1,26 +1,24 @@
 <script>
     // === VIEW MODE TOGGLE ===
     function toggleViewMode(mode) {
-        var gridEl  = document.querySelector('.grid');
         var headerEl = document.querySelector('.list-header');
+        var gridEl  = document.querySelector('.grid');
         var btnList = document.getElementById('btn-view-list');
         var btnGrid = document.getElementById('btn-view-grid');
+        
         if (!gridEl) return;
+
         if (mode === 'grid') {
             gridEl.classList.add('view-grid');
             if (headerEl) headerEl.classList.add('hidden-header');
-            btnGrid.style.background = '#e2e8f0';
-            btnGrid.style.color = '#1b5c96';
-            btnList.style.background = 'transparent';
-            btnList.style.color = '#64748b';
+            btnList.classList.remove('active');
+            btnGrid.classList.add('active');
             localStorage.setItem('driveViewMode', 'grid');
         } else {
             gridEl.classList.remove('view-grid');
             if (headerEl) headerEl.classList.remove('hidden-header');
-            btnList.style.background = '#e2e8f0';
-            btnList.style.color = '#1b5c96';
-            btnGrid.style.background = 'transparent';
-            btnGrid.style.color = '#64748b';
+            btnGrid.classList.remove('active');
+            btnList.classList.add('active');
             localStorage.setItem('driveViewMode', 'list');
         }
     }
@@ -36,8 +34,10 @@
         var popup = document.getElementById('folderPopup');
         var btn   = document.querySelector('.folder-popup-wrapper .sidebar-btn');
         popup.classList.toggle('show');
-        btn.classList.toggle('active', popup.classList.contains('show'));
+        
+        // Blur tombol agar warna hover/biru tidak tersangkut saat popup muncul
         if (popup.classList.contains('show')) {
+            btn.blur();
             setTimeout(function() {
                 document.getElementById('folderNameInput').focus();
             }, 100);
@@ -46,7 +46,6 @@
 
     function closeFolderPopup() {
         document.getElementById('folderPopup').classList.remove('show');
-        document.querySelector('.folder-popup-wrapper .sidebar-btn').classList.remove('active');
         document.getElementById('folderNameInput').value = '';
     }
 
@@ -59,6 +58,21 @@
         }
         document.getElementById(id).classList.toggle("show");
     }
+
+    // Event click untuk tombol Upload File
+    document.addEventListener('DOMContentLoaded', function() {
+        var uploadBtn = document.querySelector('.sidebar-btn-outline');
+        if (uploadBtn) {
+            uploadBtn.addEventListener('click', function() {
+                // Tambahkan class no-hover agar tidak tersangkut di state hover (abu-abu) saat dialog OS terbuka
+                uploadBtn.classList.add('no-hover');
+                window.addEventListener('focus', function onFocus() {
+                    uploadBtn.classList.remove('no-hover');
+                    window.removeEventListener('focus', onFocus);
+                }, { once: true });
+            });
+        }
+    });
 
     window.onclick = function(event) {
         // Tutup dropdown

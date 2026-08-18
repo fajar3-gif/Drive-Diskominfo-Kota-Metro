@@ -1,13 +1,13 @@
 <div class="sidebar">
-    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px;">
-        <img src="{{ asset('images/nih.png') }}" alt="Logo Kominfo" style="width: 40px; height: 40px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); flex-shrink: 0;">
-        <h2 class="logo-title" style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: 0.5px;">Komsafe</h2>
+    <div style="position: absolute; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 15px; height: 60px; padding: 0 34px; box-sizing: border-box; background-color: #1c2a47;">
+        <img src="{{ asset('images/nih.png') }}" alt="Logo Kominfo" style="width: 28px; height: 28px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); flex-shrink: 0;">
+        <h2 class="logo-title" style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: 0.5px; color: white;">Komsafe</h2>
     </div>
 
-    <div style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;">
+    <div style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 0;">
         <div class="folder-popup-wrapper">
             <button type="button" class="sidebar-btn" onclick="toggleFolderPopup()">
-                <img src="{{ asset('images/tambah-folder.png') }}" alt="Tambah Folder" style="width: 20px; height: 20px; object-fit: contain; filter: brightness(0) invert(1) !important; -webkit-filter: brightness(0) invert(1) !important;">
+                <img src="{{ asset('images/tambah-folder.png') }}" alt="Tambah Folder" style="width: 22px; height: 22px; object-fit: contain; opacity: 0.6; filter: brightness(0);">
                 Tambah Folder
             </button>
             <div class="folder-popup" id="folderPopup">
@@ -33,7 +33,7 @@
             @endif
             <input type="file" name="file" id="fileInput" style="display: none;" required onchange="document.getElementById('uploadForm').submit();">
             <button type="button" class="sidebar-btn-outline" onclick="document.getElementById('fileInput').click();">
-                <img src="{{ asset('images/upload-file.png') }}" alt="Upload File" style="width: 20px; height: 20px; object-fit: contain; filter: brightness(0); opacity: 0.7;">
+                <img src="{{ asset('images/upload-file.png') }}" alt="Upload File" style="width: 22px; height: 22px; object-fit: contain; opacity: 0.6; filter: brightness(0);">
                 Upload File
             </button>
             @error('file')

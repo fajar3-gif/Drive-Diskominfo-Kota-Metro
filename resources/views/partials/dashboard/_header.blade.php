@@ -1,6 +1,6 @@
 <div class="header">
     <!-- Form Pencarian (Kiri menyesuaikan konten) -->
-    <form action="{{ url('/dashboard') }}" method="GET" style="display: flex; gap: 12px; flex: 1; max-width: 600px; margin: 0 auto 0 0; justify-content: flex-start; align-items: center;">
+    <form action="{{ url('/dashboard') }}" method="GET" style="display: flex; gap: 12px; flex: 1; max-width: 600px; align-items: center;">
         <div style="position: relative; flex: 1; display: flex; align-items: center;">
             <button type="submit" style="position: absolute; left: 14px; background: none; border: none; padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center;" title="Cari">
                 <img src="{{ asset('images/telusuri.png') }}" alt="Cari" style="width: 20px; height: 20px; opacity: 0.6; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
