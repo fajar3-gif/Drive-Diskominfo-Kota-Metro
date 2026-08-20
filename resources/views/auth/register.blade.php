@@ -22,7 +22,7 @@
             min-height: 100vh;
             margin: 0;
             /* Background solid blue */
-            background: #0F3D91;
+            background: #1c2a47;
             position: relative;
             overflow: hidden;
         }
@@ -159,24 +159,23 @@
             font-size: 14px;
             font-weight: 600;
             color: #ffffff;
-            background: #0F3D91;
+            background: #3730a3;
             border: none;
             border-radius: 0;
             cursor: pointer;
             transition: all 0.3s ease;
             letter-spacing: 0.3px;
-            /* Efek timbul pada tombol */
             box-shadow: none;
         }
 
         .btn-register:hover {
-            background: #0d3580;
+            background: #4338ca;
             box-shadow: none;
         }
 
         .btn-register:active {
             transform: translateY(0);
-            background: #0d3580;
+            background: #312e81;
             box-shadow: none;
         }
 
@@ -189,14 +188,14 @@
         }
 
         .login-link a {
-            color: #0F3D91;
+            color: #3730a3;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s ease;
         }
 
         .login-link a:hover {
-            color: #0d3580;
+            color: #4338ca;
             text-decoration: underline;
         }
 

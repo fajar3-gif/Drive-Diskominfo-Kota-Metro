@@ -36,7 +36,7 @@
             min-height: 100vh;
             margin: 0;
             /* Background solid blue */
-            background: #0F3D91;
+            background: #1c2a47;
             position: relative;
             overflow: hidden;
         }
@@ -154,7 +154,7 @@
             font-size: 14px;
             font-weight: 600;
             color: #ffffff;
-            background: #0F3D91;
+            background: #3730a3;
             border: none;
             border-radius: 0;
             cursor: pointer;
@@ -164,13 +164,13 @@
         }
 
         .btn-login:hover {
-            background: #0d3580;
+            background: #4338ca;
             box-shadow: none;
         }
 
         .btn-login:active {
             transform: translateY(0);
-            background: #0d3580;
+            background: #312e81;
             box-shadow: none;
         }
 
@@ -240,19 +240,19 @@
         .register-link {
             text-align: center;
             font-size: 13px;
-            color: #6b7280;
+            color: #374151;
             margin-top: 12px;
         }
 
         .register-link a {
-            color: #0F3D91;
+            color: #3730a3;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.2s ease;
         }
 
         .register-link a:hover {
-            color: #0d3580;
+            color: #4338ca;
             text-decoration: underline;
         }
 
@@ -292,9 +292,9 @@
                 </div>
 
                 <div style="text-align: right; margin-bottom: 18px; margin-top: 0;">
-                    <a href="{{ route('password.request') }}" style="font-size: 12px; color: #0F3D91; text-decoration: none; font-weight: 500; transition: color 0.2s;"
-                       onmouseover="this.style.color='#0d3580'; this.style.textDecoration='underline'"
-                       onmouseout="this.style.color='#0F3D91'; this.style.textDecoration='none'">Lupa Password?</a>
+                    <a href="{{ route('password.request') }}" style="font-size: 12px; color: #3730a3; text-decoration: none; font-weight: 600; transition: color 0.2s;"
+                       onmouseover="this.style.color='#4338ca'; this.style.textDecoration='underline'"
+                       onmouseout="this.style.color='#3730a3'; this.style.textDecoration='none'">Lupa Password?</a>
                 </div>
                 <button type="submit" class="btn-login">Log In</button>
             </form>
