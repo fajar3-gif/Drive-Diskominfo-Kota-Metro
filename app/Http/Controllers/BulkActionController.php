@@ -12,6 +12,13 @@ class BulkActionController extends Controller
 
     public function bulkTrash(Request $request)
     {
+        $request->validate([
+            'folder_ids'   => 'nullable|array|max:200',
+            'folder_ids.*' => 'integer|min:1|max:4294967295',
+            'file_ids'     => 'nullable|array|max:200',
+            'file_ids.*'   => 'integer|min:1|max:4294967295',
+        ]);
+
         $folderIds = $request->input('folder_ids', []);
         $fileIds   = $request->input('file_ids', []);
 
@@ -27,6 +34,13 @@ class BulkActionController extends Controller
 
     public function bulkRestore(Request $request)
     {
+        $request->validate([
+            'folder_ids'   => 'nullable|array|max:200',
+            'folder_ids.*' => 'integer|min:1|max:4294967295',
+            'file_ids'     => 'nullable|array|max:200',
+            'file_ids.*'   => 'integer|min:1|max:4294967295',
+        ]);
+
         $folderIds = $request->input('folder_ids', []);
         $fileIds   = $request->input('file_ids', []);
 
@@ -42,6 +56,13 @@ class BulkActionController extends Controller
 
     public function bulkForceDelete(Request $request)
     {
+        $request->validate([
+            'folder_ids'   => 'nullable|array|max:200',
+            'folder_ids.*' => 'integer|min:1|max:4294967295',
+            'file_ids'     => 'nullable|array|max:200',
+            'file_ids.*'   => 'integer|min:1|max:4294967295',
+        ]);
+
         $folderIds = $request->input('folder_ids', []);
         $fileIds   = $request->input('file_ids', []);
 
@@ -65,6 +86,13 @@ class BulkActionController extends Controller
 
     public function bulkFavorite(Request $request)
     {
+        $request->validate([
+            'folder_ids'   => 'nullable|array|max:200',
+            'folder_ids.*' => 'integer|min:1|max:4294967295',
+            'file_ids'     => 'nullable|array|max:200',
+            'file_ids.*'   => 'integer|min:1|max:4294967295',
+        ]);
+
         $folderIds = $request->input('folder_ids', []);
         $fileIds   = $request->input('file_ids', []);
 
@@ -88,6 +116,13 @@ class BulkActionController extends Controller
 
     public function bulkDownload(Request $request)
     {
+        $request->validate([
+            'folder_ids'   => 'nullable|array|max:200',
+            'folder_ids.*' => 'integer|min:1|max:4294967295',
+            'file_ids'     => 'nullable|array|max:200',
+            'file_ids.*'   => 'integer|min:1|max:4294967295',
+        ]);
+
         $folderIds = $request->input('folder_ids', []);
         $fileIds   = $request->input('file_ids', []);
 
